@@ -21,7 +21,7 @@ public class AuthControllerTests
     public async Task Register_ShouldReturnOk_WhenSuccessful()
     {
         var dto = new RegisterDto("testuser", "test@example.com", "password123");
-        var authResponse = new AuthResponseDto("token", "testuser", Guid.NewGuid());
+        var authResponse = new AuthResponseDto("token", "refreshToken", "testuser", Guid.NewGuid());
 
         _mockAuthService.Setup(s => s.RegisterAsync(dto)).ReturnsAsync(authResponse);
 
@@ -30,6 +30,7 @@ public class AuthControllerTests
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         var response = Assert.IsType<AuthResponseDto>(okResult.Value);
         Assert.Equal("token", response.Token);
+        Assert.Equal("refreshToken", response.RefreshToken);
     }
 
     [Fact]
@@ -49,7 +50,7 @@ public class AuthControllerTests
     public async Task Login_ShouldReturnOk_WhenSuccessful()
     {
         var dto = new LoginDto("testuser", "password123");
-        var authResponse = new AuthResponseDto("token", "testuser", Guid.NewGuid());
+        var authResponse = new AuthResponseDto("token", "refreshToken", "testuser", Guid.NewGuid());
 
         _mockAuthService.Setup(s => s.LoginAsync(dto)).ReturnsAsync(authResponse);
 
@@ -58,6 +59,7 @@ public class AuthControllerTests
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         var response = Assert.IsType<AuthResponseDto>(okResult.Value);
         Assert.Equal("token", response.Token);
+        Assert.Equal("refreshToken", response.RefreshToken);
     }
 
     [Fact]
@@ -68,6 +70,35 @@ public class AuthControllerTests
         _mockAuthService.Setup(s => s.LoginAsync(dto)).ReturnsAsync((AuthResponseDto?)null);
 
         var result = await _controller.Login(dto);
+
+        var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result.Result);
+        Assert.Contains("Invalid", unauthorizedResult.Value?.ToString() ?? string.Empty);
+    }
+
+    [Fact]
+    public async Task RefreshToken_ShouldReturnOk_WhenValid()
+    {
+        var dto = new RefreshTokenDto("refreshToken");
+        var authResponse = new AuthResponseDto("newToken", "newRefreshToken", "testuser", Guid.NewGuid());
+
+        _mockAuthService.Setup(s => s.RefreshTokenAsync(dto.RefreshToken)).ReturnsAsync(authResponse);
+
+        var result = await _controller.RefreshToken(dto);
+
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        var response = Assert.IsType<AuthResponseDto>(okResult.Value);
+        Assert.Equal("newToken", response.Token);
+        Assert.Equal("newRefreshToken", response.RefreshToken);
+    }
+
+    [Fact]
+    public async Task RefreshToken_ShouldReturnUnauthorized_WhenInvalid()
+    {
+        var dto = new RefreshTokenDto("invalidToken");
+
+        _mockAuthService.Setup(s => s.RefreshTokenAsync(dto.RefreshToken)).ReturnsAsync((AuthResponseDto?)null);
+
+        var result = await _controller.RefreshToken(dto);
 
         var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result.Result);
         Assert.Contains("Invalid", unauthorizedResult.Value?.ToString() ?? string.Empty);

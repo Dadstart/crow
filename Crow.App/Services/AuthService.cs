@@ -11,6 +11,7 @@ public class AuthService : ObservableObject, IAuthService
     private readonly HttpClient _httpClient;
     private const string BaseUrl = "http://localhost:5064/api";
     private const string TokenKey = "auth_token";
+    private const string RefreshTokenKey = "auth_refresh_token";
     private const string UsernameKey = "auth_username";
     private const string UserIdKey = "auth_userid";
 
@@ -23,6 +24,7 @@ public class AuthService : ObservableObject, IAuthService
 
     public bool IsAuthenticated => !string.IsNullOrEmpty(Token);
     public string? Token { get; private set; }
+    public string? RefreshToken { get; private set; }
     public string? Username { get; private set; }
     public Guid? UserId { get; private set; }
 
@@ -31,6 +33,7 @@ public class AuthService : ObservableObject, IAuthService
         try
         {
             Token = SecureStorage.GetAsync(TokenKey).Result;
+            RefreshToken = SecureStorage.GetAsync(RefreshTokenKey).Result;
             Username = SecureStorage.GetAsync(UsernameKey).Result;
             var userIdString = SecureStorage.GetAsync(UserIdKey).Result;
             if (Guid.TryParse(userIdString, out var userId))
@@ -39,6 +42,7 @@ public class AuthService : ObservableObject, IAuthService
         catch
         {
             Token = null;
+            RefreshToken = null;
             Username = null;
             UserId = null;
         }
@@ -93,12 +97,14 @@ public class AuthService : ObservableObject, IAuthService
     public async Task LogoutAsync()
     {
         Token = null;
+        RefreshToken = null;
         Username = null;
         UserId = null;
 
         try
         {
             SecureStorage.Remove(TokenKey);
+            SecureStorage.Remove(RefreshTokenKey);
             SecureStorage.Remove(UsernameKey);
             SecureStorage.Remove(UserIdKey);
         }
@@ -108,21 +114,50 @@ public class AuthService : ObservableObject, IAuthService
 
         OnPropertyChanged(nameof(IsAuthenticated));
         OnPropertyChanged(nameof(Token));
+        OnPropertyChanged(nameof(RefreshToken));
         OnPropertyChanged(nameof(Username));
         OnPropertyChanged(nameof(UserId));
 
         await Task.CompletedTask;
     }
 
+    public async Task<bool> RefreshTokenAsync()
+    {
+        if (string.IsNullOrEmpty(RefreshToken))
+            return false;
+
+        try
+        {
+            var dto = new RefreshTokenDto(RefreshToken);
+            var response = await _httpClient.PostAsJsonAsync("auth/refresh", dto);
+            
+            if (!response.IsSuccessStatusCode)
+                return false;
+
+            var authResponse = await response.Content.ReadFromJsonAsync<AuthResponseDto>();
+            if (authResponse == null)
+                return false;
+
+            await StoreAuth(authResponse);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     private async Task StoreAuth(AuthResponseDto authResponse)
     {
         Token = authResponse.Token;
+        RefreshToken = authResponse.RefreshToken;
         Username = authResponse.Username;
         UserId = authResponse.UserId;
 
         try
         {
             await SecureStorage.SetAsync(TokenKey, authResponse.Token);
+            await SecureStorage.SetAsync(RefreshTokenKey, authResponse.RefreshToken);
             await SecureStorage.SetAsync(UsernameKey, authResponse.Username);
             await SecureStorage.SetAsync(UserIdKey, authResponse.UserId.ToString());
         }
@@ -132,6 +167,7 @@ public class AuthService : ObservableObject, IAuthService
         
         OnPropertyChanged(nameof(IsAuthenticated));
         OnPropertyChanged(nameof(Token));
+        OnPropertyChanged(nameof(RefreshToken));
         OnPropertyChanged(nameof(Username));
         OnPropertyChanged(nameof(UserId));
     }

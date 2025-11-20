@@ -10,6 +10,7 @@ public class InMemoryStorageService : IStorageService
     private readonly Dictionary<Guid, User> _users = [];
     private readonly Dictionary<string, Guid> _usernameIndex = [];
     private readonly Dictionary<string, Guid> _emailIndex = [];
+    private readonly Dictionary<string, (Guid UserId, DateTime ExpiresAt)> _refreshTokens = [];
 
     // Notes
     public Task<List<Note>> GetAllNotesAsync()
@@ -138,6 +139,46 @@ public class InMemoryStorageService : IStorageService
         _usernameIndex[user.Username.ToLowerInvariant()] = user.Id;
         _emailIndex[user.Email.ToLowerInvariant()] = user.Id;
         return Task.FromResult(user);
+    }
+
+    // Refresh Tokens
+    public Task StoreRefreshTokenAsync(Guid userId, string refreshToken, DateTime expiresAt)
+    {
+        _refreshTokens[refreshToken] = (userId, expiresAt);
+        return Task.CompletedTask;
+    }
+
+    public Task<Guid?> GetUserIdByRefreshTokenAsync(string refreshToken)
+    {
+        if (!_refreshTokens.TryGetValue(refreshToken, out var tokenData))
+            return Task.FromResult<Guid?>(null);
+
+        if (tokenData.ExpiresAt < DateTime.UtcNow)
+        {
+            _refreshTokens.Remove(refreshToken);
+            return Task.FromResult<Guid?>(null);
+        }
+
+        return Task.FromResult<Guid?>(tokenData.UserId);
+    }
+
+    public Task RevokeRefreshTokenAsync(string refreshToken)
+    {
+        _refreshTokens.Remove(refreshToken);
+        return Task.CompletedTask;
+    }
+
+    public Task RevokeAllRefreshTokensForUserAsync(Guid userId)
+    {
+        var tokensToRemove = _refreshTokens
+            .Where(kvp => kvp.Value.UserId == userId)
+            .Select(kvp => kvp.Key)
+            .ToList();
+
+        foreach (var token in tokensToRemove)
+            _refreshTokens.Remove(token);
+
+        return Task.CompletedTask;
     }
 }
 

@@ -32,7 +32,11 @@ public class AuthService : IAuthService
         var created = await _storageService.CreateUserAsync(user);
 
         var token = _jwtTokenService.GenerateToken(created.Id, created.Username);
-        return new AuthResponseDto(token, created.Username, created.Id);
+        var refreshToken = _jwtTokenService.GenerateRefreshToken();
+        var refreshTokenExpiresAt = DateTime.UtcNow.AddDays(7);
+        await _storageService.StoreRefreshTokenAsync(created.Id, refreshToken, refreshTokenExpiresAt);
+
+        return new AuthResponseDto(token, refreshToken, created.Username, created.Id);
     }
 
     public async Task<AuthResponseDto?> LoginAsync(LoginDto dto)
@@ -45,7 +49,31 @@ public class AuthService : IAuthService
             return null;
 
         var token = _jwtTokenService.GenerateToken(user.Id, user.Username);
-        return new AuthResponseDto(token, user.Username, user.Id);
+        var refreshToken = _jwtTokenService.GenerateRefreshToken();
+        var refreshTokenExpiresAt = DateTime.UtcNow.AddDays(7);
+        await _storageService.StoreRefreshTokenAsync(user.Id, refreshToken, refreshTokenExpiresAt);
+
+        return new AuthResponseDto(token, refreshToken, user.Username, user.Id);
+    }
+
+    public async Task<AuthResponseDto?> RefreshTokenAsync(string refreshToken)
+    {
+        var userId = await _storageService.GetUserIdByRefreshTokenAsync(refreshToken);
+        if (userId == null)
+            return null;
+
+        var user = await _storageService.GetUserByIdAsync(userId.Value);
+        if (user == null)
+            return null;
+
+        await _storageService.RevokeRefreshTokenAsync(refreshToken);
+
+        var newToken = _jwtTokenService.GenerateToken(user.Id, user.Username);
+        var newRefreshToken = _jwtTokenService.GenerateRefreshToken();
+        var refreshTokenExpiresAt = DateTime.UtcNow.AddDays(7);
+        await _storageService.StoreRefreshTokenAsync(user.Id, newRefreshToken, refreshTokenExpiresAt);
+
+        return new AuthResponseDto(newToken, newRefreshToken, user.Username, user.Id);
     }
 
     public async Task<User?> GetUserByIdAsync(Guid userId)

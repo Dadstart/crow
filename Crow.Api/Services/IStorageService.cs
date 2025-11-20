@@ -30,5 +30,11 @@ public interface IStorageService
     Task<User?> GetUserByUsernameAsync(string username);
     Task<User?> GetUserByEmailAsync(string email);
     Task<User> CreateUserAsync(User user);
+
+    // Refresh Tokens
+    Task StoreRefreshTokenAsync(Guid userId, string refreshToken, DateTime expiresAt);
+    Task<Guid?> GetUserIdByRefreshTokenAsync(string refreshToken);
+    Task RevokeRefreshTokenAsync(string refreshToken);
+    Task RevokeAllRefreshTokensForUserAsync(Guid userId);
 }
 

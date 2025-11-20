@@ -25,6 +25,7 @@ public class AuthIntegrationTests : IClassFixture<CrowWebApplicationFactory>
         var authResponse = await response.Content.ReadFromJsonAsync<AuthResponseDto>();
         Assert.NotNull(authResponse);
         Assert.NotEmpty(authResponse.Token);
+        Assert.NotEmpty(authResponse.RefreshToken);
         Assert.Equal(dto.Username, authResponse.Username);
         Assert.NotEqual(Guid.Empty, authResponse.UserId);
     }
@@ -71,6 +72,7 @@ public class AuthIntegrationTests : IClassFixture<CrowWebApplicationFactory>
         var authResponse = await response.Content.ReadFromJsonAsync<AuthResponseDto>();
         Assert.NotNull(authResponse);
         Assert.NotEmpty(authResponse.Token);
+        Assert.NotEmpty(authResponse.RefreshToken);
         Assert.Equal(username, authResponse.Username);
     }
 
@@ -95,6 +97,58 @@ public class AuthIntegrationTests : IClassFixture<CrowWebApplicationFactory>
         var response = await _client.PostAsJsonAsync("/api/auth/login", loginDto);
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task RefreshToken_ShouldReturnNewTokens_WhenValid()
+    {
+        var username = $"testuser_{Guid.NewGuid()}";
+        var password = "password123";
+        var registerDto = new RegisterDto(username, $"test{Guid.NewGuid()}@example.com", password);
+        
+        var registerResponse = await _client.PostAsJsonAsync("/api/auth/register", registerDto);
+        var authResponse = await registerResponse.Content.ReadFromJsonAsync<AuthResponseDto>();
+        Assert.NotNull(authResponse);
+
+        var refreshDto = new RefreshTokenDto(authResponse.RefreshToken);
+        var response = await _client.PostAsJsonAsync("/api/auth/refresh", refreshDto);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var newAuthResponse = await response.Content.ReadFromJsonAsync<AuthResponseDto>();
+        Assert.NotNull(newAuthResponse);
+        Assert.NotEmpty(newAuthResponse.Token);
+        Assert.NotEmpty(newAuthResponse.RefreshToken);
+        Assert.NotEqual(authResponse.Token, newAuthResponse.Token);
+        Assert.NotEqual(authResponse.RefreshToken, newAuthResponse.RefreshToken);
+        Assert.Equal(username, newAuthResponse.Username);
+    }
+
+    [Fact]
+    public async Task RefreshToken_ShouldReturnUnauthorized_WhenInvalid()
+    {
+        var refreshDto = new RefreshTokenDto("invalid_refresh_token");
+        var response = await _client.PostAsJsonAsync("/api/auth/refresh", refreshDto);
+
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task RefreshToken_ShouldReturnUnauthorized_WhenReused()
+    {
+        var username = $"testuser_{Guid.NewGuid()}";
+        var password = "password123";
+        var registerDto = new RegisterDto(username, $"test{Guid.NewGuid()}@example.com", password);
+        
+        var registerResponse = await _client.PostAsJsonAsync("/api/auth/register", registerDto);
+        var authResponse = await registerResponse.Content.ReadFromJsonAsync<AuthResponseDto>();
+        Assert.NotNull(authResponse);
+
+        var refreshDto = new RefreshTokenDto(authResponse.RefreshToken);
+        await _client.PostAsJsonAsync("/api/auth/refresh", refreshDto);
+
+        var secondRefreshResponse = await _client.PostAsJsonAsync("/api/auth/refresh", refreshDto);
+
+        Assert.Equal(HttpStatusCode.Unauthorized, secondRefreshResponse.StatusCode);
     }
 }
 
