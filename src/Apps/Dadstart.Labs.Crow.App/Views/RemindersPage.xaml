@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Dadstart.Labs.Crow.Views.RemindersPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:Dadstart.Labs.Crow.ViewModels"
+    xmlns:models="clr-namespace:Dadstart.Labs.Crow.Models;assembly=Dadstart.Labs.Crow.Core"
+    x:DataType="viewmodels:RemindersViewModel"
+    Title="Reminders">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Text="Add"
+            Command="{Binding AddReminderCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <RefreshView
+        Command="{Binding RefreshCommand}"
+        IsRefreshing="{Binding IsRefreshing}">
+        <CollectionView ItemsSource="{Binding Reminders}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ReminderEntry">
+                    <Border
+                        Padding="12"
+                        Margin="8"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 12">
+                        <VerticalStackLayout>
+                            <Label
+                                Text="{Binding Title}"
+                                FontAttributes="Bold"
+                                FontSize="18" />
+                            <Label Text="{Binding Body}" />
+                            <Label
+                                Text="{Binding ScheduledAt, StringFormat='Due {0:G}'}"
+                                FontAttributes="Italic" />
+                            <Label
+                                Text="{Binding Recurrence}"
+                                FontSize="12"
+                                TextColor="Gray" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>
+

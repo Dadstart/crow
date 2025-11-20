@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Dadstart.Labs.Crow.App</name>
+    </assembly>
+    <members>
+        <member name="T:Dadstart.Labs.Crow.ViewModels.NotesViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.NotesViewModel.IsRefreshing">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.NotesViewModel.isRefreshing"/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.NotesViewModel.SearchQuery">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.NotesViewModel.searchQuery"/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.NotesViewModel.StatusMessage">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.NotesViewModel.statusMessage"/>
+        </member>
+        <member name="T:Dadstart.Labs.Crow.ViewModels.PasswordsViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.PasswordsViewModel.IsRefreshing">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.PasswordsViewModel.isRefreshing"/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.PasswordsViewModel.SearchQuery">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.PasswordsViewModel.searchQuery"/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.PasswordsViewModel.StatusMessage">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.PasswordsViewModel.statusMessage"/>
+        </member>
+        <member name="T:Dadstart.Labs.Crow.ViewModels.RemindersViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.RemindersViewModel.IsRefreshing">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.RemindersViewModel.isRefreshing"/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.RemindersViewModel.StatusMessage">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.RemindersViewModel.statusMessage"/>
+        </member>
+        <member name="T:Dadstart.Labs.Crow.ViewModels.StartupViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.StartupViewModel.IsBusy">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.StartupViewModel.isBusy"/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.StartupViewModel.RequiresSetup">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.StartupViewModel.requiresSetup"/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.StartupViewModel.SupportsBiometric">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.StartupViewModel.supportsBiometric"/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.StartupViewModel.BiometricPreferred">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.StartupViewModel.biometricPreferred"/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.StartupViewModel.UnlockEnabled">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.StartupViewModel.unlockEnabled"/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.StartupViewModel.StatusMessage">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.StartupViewModel.statusMessage"/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.StartupViewModel.SetupPin">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.StartupViewModel.setupPin"/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.StartupViewModel.SetupMasterPassword">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.StartupViewModel.setupMasterPassword"/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.StartupViewModel.SetupBiometric">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.StartupViewModel.setupBiometric"/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.StartupViewModel.UnlockPin">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.StartupViewModel.unlockPin"/>
+        </member>
+        <member name="P:Dadstart.Labs.Crow.ViewModels.StartupViewModel.UnlockPassword">
+            <inheritdoc cref="F:Dadstart.Labs.Crow.ViewModels.StartupViewModel.unlockPassword"/>
+        </member>
+        <member name="M:Dadstart.Labs.Crow.ViewModels.StartupViewModel.OnRequiresSetupChanged(System.Boolean)">
+            <summary>Executes the logic for when <see cref="P:Dadstart.Labs.Crow.ViewModels.StartupViewModel.RequiresSetup"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:Dadstart.Labs.Crow.ViewModels.StartupViewModel.RequiresSetup"/> is changed.</remarks>
+        </member>
+        <member name="T:Dadstart.Labs.Crow.Resource">
+            <summary>
+            Android Resource Designer class.
+            Exposes the Android Resource designer assembly into the project Namespace.
+            </summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsRefreshing">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsRefreshing" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SearchQuery">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SearchQuery" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.StatusMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "StatusMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsBusy">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsBusy" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.RequiresSetup">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "RequiresSetup" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SupportsBiometric">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SupportsBiometric" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.BiometricPreferred">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "BiometricPreferred" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.UnlockEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "UnlockEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SetupPin">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SetupPin" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SetupMasterPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SetupMasterPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SetupBiometric">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SetupBiometric" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.UnlockPin">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "UnlockPin" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.UnlockPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "UnlockPassword" generated properties.</summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsRefreshing">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsRefreshing" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SearchQuery">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SearchQuery" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.StatusMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "StatusMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsBusy">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsBusy" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.RequiresSetup">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "RequiresSetup" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SupportsBiometric">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SupportsBiometric" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.BiometricPreferred">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "BiometricPreferred" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.UnlockEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "UnlockEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SetupPin">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SetupPin" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SetupMasterPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SetupMasterPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SetupBiometric">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SetupBiometric" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.UnlockPin">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "UnlockPin" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.UnlockPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "UnlockPassword" generated properties.</summary>
+        </member>
+    </members>
+</doc>

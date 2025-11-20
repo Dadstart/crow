@@ -1,0 +1,13 @@
+C:\repos\crow.gpt51\src\Core\Dadstart.Labs.Crow.Core\bin\Debug\net9.0\Dadstart.Labs.Crow.Core.deps.json
+C:\repos\crow.gpt51\src\Core\Dadstart.Labs.Crow.Core\bin\Debug\net9.0\Dadstart.Labs.Crow.Core.dll
+C:\repos\crow.gpt51\src\Core\Dadstart.Labs.Crow.Core\bin\Debug\net9.0\Dadstart.Labs.Crow.Core.pdb
+C:\repos\crow.gpt51\src\Core\Dadstart.Labs.Crow.Core\obj\Debug\net9.0\Dadstart.Labs.Crow.Core.csproj.AssemblyReference.cache
+C:\repos\crow.gpt51\src\Core\Dadstart.Labs.Crow.Core\obj\Debug\net9.0\Dadstart.Labs.Crow.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\repos\crow.gpt51\src\Core\Dadstart.Labs.Crow.Core\obj\Debug\net9.0\Dadstart.Labs.Crow.Core.AssemblyInfoInputs.cache
+C:\repos\crow.gpt51\src\Core\Dadstart.Labs.Crow.Core\obj\Debug\net9.0\Dadstart.Labs.Crow.Core.AssemblyInfo.cs
+C:\repos\crow.gpt51\src\Core\Dadstart.Labs.Crow.Core\obj\Debug\net9.0\Dadstart.Labs.Crow.Core.csproj.CoreCompileInputs.cache
+C:\repos\crow.gpt51\src\Core\Dadstart.Labs.Crow.Core\obj\Debug\net9.0\Dadstart.Labs.Crow.Core.sourcelink.json
+C:\repos\crow.gpt51\src\Core\Dadstart.Labs.Crow.Core\obj\Debug\net9.0\Dadstart.Labs.Crow.Core.dll
+C:\repos\crow.gpt51\src\Core\Dadstart.Labs.Crow.Core\obj\Debug\net9.0\refint\Dadstart.Labs.Crow.Core.dll
+C:\repos\crow.gpt51\src\Core\Dadstart.Labs.Crow.Core\obj\Debug\net9.0\Dadstart.Labs.Crow.Core.pdb
+C:\repos\crow.gpt51\src\Core\Dadstart.Labs.Crow.Core\obj\Debug\net9.0\ref\Dadstart.Labs.Crow.Core.dll

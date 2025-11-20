@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Dadstart.Labs.Crow.Views.StartupPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:Dadstart.Labs.Crow.ViewModels"
+    x:DataType="viewmodels:StartupViewModel"
+    BackgroundColor="{AppThemeBinding Light='#f5f5f5', Dark='#1c1c1c'}"
+    Title="Welcome">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="24"
+            Spacing="18">
+            <Label
+                Text="Crow Vault"
+                FontSize="32"
+                FontAttributes="Bold" />
+            <Label
+                Text="Secure notes, passwords, and reminders in one place."
+                FontAttributes="Italic"
+                FontSize="16" />
+
+            <Border
+                StrokeShape="RoundRectangle 16"
+                StrokeThickness="1"
+                Padding="16">
+                <VerticalStackLayout Spacing="12">
+                    <Label
+                        Text="Create your vault"
+                        FontSize="20"
+                        FontAttributes="Bold" />
+                    <Entry
+                        Placeholder="Master PIN"
+                        Text="{Binding SetupPin}"
+                        Keyboard="Numeric"
+                        IsPassword="True" />
+                    <Entry
+                        Placeholder="Master password (optional)"
+                        Text="{Binding SetupMasterPassword}"
+                        IsPassword="True" />
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="Enable biometric unlock" VerticalOptions="Center" />
+                        <Switch IsToggled="{Binding SetupBiometric}" />
+                    </HorizontalStackLayout>
+                    <Button
+                        Text="Create vault"
+                        Command="{Binding SetupCommand}"
+                        IsEnabled="{Binding RequiresSetup}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border
+                StrokeShape="RoundRectangle 16"
+                StrokeThickness="1"
+                Padding="16">
+                <VerticalStackLayout Spacing="12">
+                    <Label
+                        Text="Unlock"
+                        FontSize="20"
+                        FontAttributes="Bold" />
+                    <Entry
+                        Placeholder="PIN"
+                        Text="{Binding UnlockPin}"
+                        Keyboard="Numeric"
+                        IsPassword="True" />
+                    <Button
+                        Text="Unlock with PIN"
+                        Command="{Binding UnlockWithPinCommand}"
+                        IsEnabled="{Binding UnlockEnabled}" />
+                    <Entry
+                        Placeholder="Master password"
+                        Text="{Binding UnlockPassword}"
+                        IsPassword="True" />
+                    <Button
+                        Text="Unlock with password"
+                        Command="{Binding UnlockWithPasswordCommand}"
+                        IsEnabled="{Binding UnlockEnabled}" />
+                    <Button
+                        Text="Use biometrics"
+                        Command="{Binding UnlockWithBiometricCommand}"
+                        IsEnabled="{Binding UnlockEnabled}"
+                        IsVisible="{Binding SupportsBiometric}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Label
+                Text="{Binding StatusMessage}"
+                TextColor="{AppThemeBinding Light='Maroon', Dark='#ffb4a2'}"
+                FontAttributes="Bold" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+
