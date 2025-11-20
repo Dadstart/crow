@@ -51,7 +51,7 @@ public class RemindersControllerTests
     [Fact]
     public async Task Create_ShouldCreateReminder()
     {
-        var dueDate = DateTime.UtcNow.AddDays(1);
+        var dueDate = DateTimeOffset.UtcNow.AddDays(1);
         var dto = new CreateReminderDto("Test", "Description", dueDate);
         var reminder = Reminder.Create(dto.Title, dto.Description, dto.DueDate);
         _mockStorage.Setup(s => s.CreateReminderAsync(It.IsAny<Reminder>())).ReturnsAsync(reminder);

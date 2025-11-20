@@ -14,7 +14,7 @@ public class NoteTests
         Assert.Equal("Test Title", note.Title);
         Assert.Equal("Test Content", note.Content);
         Assert.Equal(tags, note.Tags);
-        Assert.True(note.CreatedAt <= DateTime.UtcNow);
+        Assert.True(note.CreatedAt <= DateTimeOffset.UtcNow);
         Assert.Equal(note.CreatedAt, note.UpdatedAt);
     }
 

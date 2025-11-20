@@ -4,14 +4,14 @@ public record Reminder(
     Guid Id,
     string Title,
     string? Description,
-    DateTime? DueDate,
+    DateTimeOffset? DueDate,
     bool IsCompleted,
-    DateTime CreatedAt,
-    DateTime UpdatedAt)
+    DateTimeOffset CreatedAt,
+    DateTimeOffset UpdatedAt)
 {
-    public static Reminder Create(string title, string? description = null, DateTime? dueDate = null)
+    public static Reminder Create(string title, string? description = null, DateTimeOffset? dueDate = null)
     {
-        var now = DateTime.UtcNow;
+        var now = DateTimeOffset.UtcNow;
         return new Reminder(
             Id: Guid.NewGuid(),
             Title: title,
@@ -22,7 +22,7 @@ public record Reminder(
             UpdatedAt: now);
     }
 
-    public Reminder WithUpdate(string? title = null, string? description = null, DateTime? dueDate = null, bool? isCompleted = null)
+    public Reminder WithUpdate(string? title = null, string? description = null, DateTimeOffset? dueDate = null, bool? isCompleted = null)
     {
         return this with
         {
@@ -30,18 +30,18 @@ public record Reminder(
             Description = description ?? Description,
             DueDate = dueDate ?? DueDate,
             IsCompleted = isCompleted ?? IsCompleted,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTimeOffset.UtcNow
         };
     }
 
     public Reminder MarkCompleted()
     {
-        return this with { IsCompleted = true, UpdatedAt = DateTime.UtcNow };
+        return this with { IsCompleted = true, UpdatedAt = DateTimeOffset.UtcNow };
     }
 
     public Reminder MarkIncomplete()
     {
-        return this with { IsCompleted = false, UpdatedAt = DateTime.UtcNow };
+        return this with { IsCompleted = false, UpdatedAt = DateTimeOffset.UtcNow };
     }
 }
 

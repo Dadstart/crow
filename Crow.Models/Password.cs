@@ -7,12 +7,12 @@ public record Password(
     string EncryptedPassword,
     string? Url,
     string? Notes,
-    DateTime CreatedAt,
-    DateTime UpdatedAt)
+    DateTimeOffset CreatedAt,
+    DateTimeOffset UpdatedAt)
 {
     public static Password Create(string title, string username, string encryptedPassword, string? url = null, string? notes = null)
     {
-        var now = DateTime.UtcNow;
+        var now = DateTimeOffset.UtcNow;
         return new Password(
             Id: Guid.NewGuid(),
             Title: title,
@@ -33,7 +33,7 @@ public record Password(
             EncryptedPassword = encryptedPassword ?? EncryptedPassword,
             Url = url ?? Url,
             Notes = notes ?? Notes,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTimeOffset.UtcNow
         };
     }
 }

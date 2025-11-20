@@ -7,7 +7,7 @@ public class ReminderTests
     [Fact]
     public void Create_ShouldSetAllProperties()
     {
-        var dueDate = DateTime.UtcNow.AddDays(1);
+        var dueDate = DateTimeOffset.UtcNow.AddDays(1);
         var reminder = Reminder.Create("Test", "Description", dueDate);
 
         Assert.NotEqual(Guid.Empty, reminder.Id);
@@ -15,7 +15,7 @@ public class ReminderTests
         Assert.Equal("Description", reminder.Description);
         Assert.Equal(dueDate, reminder.DueDate);
         Assert.False(reminder.IsCompleted);
-        Assert.True(reminder.CreatedAt <= DateTime.UtcNow);
+        Assert.True(reminder.CreatedAt <= DateTimeOffset.UtcNow);
     }
 
     [Fact]
@@ -30,8 +30,8 @@ public class ReminderTests
     [Fact]
     public void WithUpdate_ShouldUpdateSpecifiedFields()
     {
-        var original = Reminder.Create("Original", "Original Desc", DateTime.UtcNow.AddDays(1));
-        var newDueDate = DateTime.UtcNow.AddDays(2);
+        var original = Reminder.Create("Original", "Original Desc", DateTimeOffset.UtcNow.AddDays(1));
+        var newDueDate = DateTimeOffset.UtcNow.AddDays(2);
         var updated = original.WithUpdate("Updated", "Updated Desc", newDueDate, true);
 
         Assert.Equal("Updated", updated.Title);

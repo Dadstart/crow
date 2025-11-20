@@ -7,6 +7,6 @@ public record PasswordResponseDto(
     string? DecryptedPassword,
     string? Url,
     string? Notes,
-    DateTime CreatedAt,
-    DateTime UpdatedAt);
+    DateTimeOffset CreatedAt,
+    DateTimeOffset UpdatedAt);
 

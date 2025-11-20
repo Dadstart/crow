@@ -15,7 +15,7 @@ public class PasswordTests
         Assert.Equal("encrypted123", password.EncryptedPassword);
         Assert.Equal("https://example.com", password.Url);
         Assert.Equal("Notes", password.Notes);
-        Assert.True(password.CreatedAt <= DateTime.UtcNow);
+        Assert.True(password.CreatedAt <= DateTimeOffset.UtcNow);
     }
 
     [Fact]

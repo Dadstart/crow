@@ -4,13 +4,13 @@ public record Note(
     Guid Id,
     string Title,
     string Content,
-    DateTime CreatedAt,
-    DateTime UpdatedAt,
+    DateTimeOffset CreatedAt,
+    DateTimeOffset UpdatedAt,
     List<string> Tags)
 {
     public static Note Create(string title, string content, List<string>? tags = null)
     {
-        var now = DateTime.UtcNow;
+        var now = DateTimeOffset.UtcNow;
         return new Note(
             Id: Guid.NewGuid(),
             Title: title,
@@ -27,7 +27,7 @@ public record Note(
             Title = title ?? Title,
             Content = content ?? Content,
             Tags = tags ?? Tags,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTimeOffset.UtcNow
         };
     }
 }

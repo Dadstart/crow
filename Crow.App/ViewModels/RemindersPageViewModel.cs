@@ -23,7 +23,7 @@ public partial class RemindersPageViewModel : ObservableObject
     private string _description = string.Empty;
 
     [ObservableProperty]
-    private DateTime? _dueDate;
+    private DateTimeOffset? _dueDate;
 
     [ObservableProperty]
     private Reminder? _selectedReminder;

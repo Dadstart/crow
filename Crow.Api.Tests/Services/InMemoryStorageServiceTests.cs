@@ -160,7 +160,7 @@ public class InMemoryStorageServiceTests
     [Fact]
     public async Task CreateReminder_ShouldAddReminderToStorage()
     {
-        var reminder = Reminder.Create("Test", "Description", DateTime.UtcNow.AddDays(1));
+        var reminder = Reminder.Create("Test", "Description", DateTimeOffset.UtcNow.AddDays(1));
 
         var result = await _storageService.CreateReminderAsync(reminder);
 

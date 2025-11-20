@@ -5,12 +5,12 @@ public record User(
     string Username,
     string Email,
     string PasswordHash,
-    DateTime CreatedAt,
-    DateTime UpdatedAt)
+    DateTimeOffset CreatedAt,
+    DateTimeOffset UpdatedAt)
 {
     public static User Create(string username, string email, string passwordHash)
     {
-        var now = DateTime.UtcNow;
+        var now = DateTimeOffset.UtcNow;
         return new User(
             Id: Guid.NewGuid(),
             Username: username,

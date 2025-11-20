@@ -16,7 +16,7 @@ public class RemindersIntegrationTests : IntegrationTestBase
     public async Task CreateReminder_ShouldReturnCreatedReminder()
     {
         var client = await GetAuthenticatedClientAsync();
-        var dueDate = DateTime.UtcNow.AddDays(1);
+        var dueDate = DateTimeOffset.UtcNow.AddDays(1);
         var dto = new CreateReminderDto("Test Reminder", "Description", dueDate);
 
         var response = await client.PostAsJsonAsync("/api/reminders", dto);
@@ -35,7 +35,7 @@ public class RemindersIntegrationTests : IntegrationTestBase
     {
         var client = await GetAuthenticatedClientAsync();
         var dto1 = new CreateReminderDto("Reminder 1", "Desc 1", null);
-        var dto2 = new CreateReminderDto("Reminder 2", "Desc 2", DateTime.UtcNow.AddDays(2));
+        var dto2 = new CreateReminderDto("Reminder 2", "Desc 2", DateTimeOffset.UtcNow.AddDays(2));
 
         var create1 = await client.PostAsJsonAsync("/api/reminders", dto1);
         create1.EnsureSuccessStatusCode();
@@ -59,7 +59,7 @@ public class RemindersIntegrationTests : IntegrationTestBase
         createResponse.EnsureSuccessStatusCode();
         var created = await createResponse.Content.ReadFromJsonAsync<Reminder>();
 
-        var newDueDate = DateTime.UtcNow.AddDays(3);
+        var newDueDate = DateTimeOffset.UtcNow.AddDays(3);
         var updateDto = new UpdateReminderDto("Updated", "Updated Desc", newDueDate, true);
         var updateResponse = await client.PutAsJsonAsync($"/api/reminders/{created!.Id}", updateDto);
 
