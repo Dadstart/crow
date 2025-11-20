@@ -17,12 +17,13 @@
 
 ### dotnet
 
-- Use dotnet 9
+- Use dotnet 10
 
 ### C#
 
 #### General
-- Use C# 13
+
+- Use C# 14
 - Root C# namespace is Dadstart.Labs.MediaForge
 - Do not add copyright file headers to C# files
 - Do not use StyleCop
@@ -34,27 +35,54 @@
 - Use classes/structs when mutable behavior, identity semantics, or complex lifecycle/behavior is primary.
 
 #### Naming Conventions
+
 - Constants: PascalCase
 - Private instance fields: Prefix with underscore then camelCase
 - Static readonly fields: PascalCase
 - Enums: Use PascalCase for members
 
 #### Documentation Comments
+
 - Property comments should not use "Gets a" or "Gets the". Use direct descriptions instead (e.g., "Dictionary of..." instead of "Gets a dictionary of...")
 - Do not include `<exception>` tags in XML documentation comments
-
 
 ### PowerShell
 
 - Use PowerShell 7.5
 
-### Ffmpeg and Ffprobe
-
-- Use proper casing for 'Ffprobe' and 'Ffmpeg' when naming code elements
-
 ### JSON
 
 - Do not add comments to JSON files unless the agent knows that comments are allowed in that specific file format (e.g., JSONC, JSON5, or tool-specific JSON parsers that support comments)
+
+## Supported Browsers and Platforms
+
+### Web
+
+- Edge 142 and newer
+- Chrome 119 and newer
+- Latest Safari version on iOS only
+- Latest Safari on mac OS and newer ()
+
+### Windows
+
+- Windows 11 24H2 (26100.7178) and newer
+
+### Mac
+
+- macOS 26 and newer
+- Minimal support since I do not have a Mac to test on
+
+### Chromebook
+
+- ChromeOS 133 and newer
+
+### Android
+
+- Android 16 and newer
+
+### iOS
+
+- iOS 26 and newer
 
 ## Code Quality
 
@@ -79,12 +107,12 @@
 - Use GitHub actions for CI/CD to do the following
   - build, test, lint
   - pack artifacts
-  - No CD. Do not publish.
+  - No CD (publish, etc.), yet. Will do in the future.
 
 ## Testing
 
-
 ### General
+
 - Full testing required for all code
 - Use modern testing methodologies
 - Always add unit tests for code changes
@@ -92,9 +120,10 @@
 - Prompt to add functional testing
 
 ### C#
+
 - Use xUnit for C# testing
 - Use Moq for C# mocks
 
-
 ### PowerShell
+
 - Use Pester for PowerShell testing
