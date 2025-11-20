@@ -1,6 +1,7 @@
 using Dadstart.Labs.Crow.Api.Services;
 using Dadstart.Labs.Crow.Models;
 using Dadstart.Labs.Crow.Models.Dtos;
+using Dadstart.Labs.Crow.Models.Factories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ namespace Dadstart.Labs.Crow.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class PasswordsController(IStorageService storageService, IEncryptionService encryptionService) : ControllerBase
+public class PasswordsController(IStorageService storageService, IEncryptionService encryptionService, PasswordFactory passwordFactory) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<List<PasswordResponseDto>>> GetAll()
@@ -50,7 +51,7 @@ public class PasswordsController(IStorageService storageService, IEncryptionServ
     public async Task<ActionResult<PasswordResponseDto>> Create([FromBody] CreatePasswordDto dto)
     {
         var encryptedPassword = encryptionService.Encrypt(dto.Password);
-        var password = Password.Create(dto.Title, dto.Username, encryptedPassword, dto.Url, dto.Notes);
+        var password = passwordFactory.Create(dto.Title, dto.Username, encryptedPassword, dto.Url, dto.Notes);
         var created = await storageService.CreatePasswordAsync(password);
         
         var response = new PasswordResponseDto(
@@ -76,7 +77,7 @@ public class PasswordsController(IStorageService storageService, IEncryptionServ
             ? encryptionService.Encrypt(dto.Password) 
             : existing.EncryptedPassword;
         
-        var updated = existing.WithUpdate(dto.Title, dto.Username, encryptedPassword, dto.Url, dto.Notes);
+        var updated = passwordFactory.WithUpdate(existing, dto.Title, dto.Username, encryptedPassword, dto.Url, dto.Notes);
         var result = await storageService.UpdatePasswordAsync(id, updated);
         
         if (result == null)

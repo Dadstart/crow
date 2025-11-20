@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Dadstart.Labs.Crow.App.Services;
+using Dadstart.Labs.Crow.Models.Factories;
 using CommunityToolkit.Mvvm;
 
 namespace Dadstart.Labs.Crow.App;
@@ -16,6 +17,13 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
+
+        builder.Services.AddSingleton<TimeProvider>(TimeProvider.System);
+
+        builder.Services.AddSingleton<UserFactory>();
+        builder.Services.AddSingleton<ReminderFactory>();
+        builder.Services.AddSingleton<NoteFactory>();
+        builder.Services.AddSingleton<PasswordFactory>();
 
         builder.Services.AddSingleton<IAuthService, Services.AuthService>();
         builder.Services.AddHttpClient<IApiService, ApiService>();

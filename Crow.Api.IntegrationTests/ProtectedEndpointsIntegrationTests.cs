@@ -124,7 +124,7 @@ public class ProtectedEndpointsIntegrationTests : IClassFixture<CrowWebApplicati
     {
         var token = await GetAuthTokenAsync();
         var authenticatedClient = CreateAuthenticatedClient(token);
-        var dto = new CreateReminderDto("Test Reminder", "Description", DateTimeOffset.UtcNow.AddDays(1));
+        var dto = new CreateReminderDto("Test Reminder", "Description", TimeProvider.System.GetUtcNow().AddDays(1));
 
         var response = await authenticatedClient.PostAsJsonAsync("/api/reminders", dto);
 

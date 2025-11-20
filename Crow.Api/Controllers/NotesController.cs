@@ -1,6 +1,7 @@
 using Dadstart.Labs.Crow.Api.Services;
 using Dadstart.Labs.Crow.Models;
 using Dadstart.Labs.Crow.Models.Dtos;
+using Dadstart.Labs.Crow.Models.Factories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ namespace Dadstart.Labs.Crow.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class NotesController(IStorageService storageService) : ControllerBase
+public class NotesController(IStorageService storageService, NoteFactory noteFactory) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<List<Note>>> GetAll()
@@ -31,7 +32,7 @@ public class NotesController(IStorageService storageService) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Note>> Create([FromBody] CreateNoteDto dto)
     {
-        var note = Note.Create(dto.Title, dto.Content, dto.Tags);
+        var note = noteFactory.Create(dto.Title, dto.Content, dto.Tags);
         var created = await storageService.CreateNoteAsync(note);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
@@ -43,7 +44,7 @@ public class NotesController(IStorageService storageService) : ControllerBase
         if (existing == null)
             return NotFound();
 
-        var updated = existing.WithUpdate(dto.Title, dto.Content, dto.Tags);
+        var updated = noteFactory.WithUpdate(existing, dto.Title, dto.Content, dto.Tags);
         var result = await storageService.UpdateNoteAsync(id, updated);
         return Ok(result);
     }

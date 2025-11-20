@@ -1,21 +1,28 @@
 using Dadstart.Labs.Crow.Api.Services;
 using Dadstart.Labs.Crow.Models;
+using Dadstart.Labs.Crow.Models.Factories;
 
 namespace Dadstart.Labs.Crow.Api.Tests.Services;
 
 public class InMemoryStorageServiceTests
 {
     private readonly IStorageService _storageService;
+    private readonly NoteFactory _noteFactory;
+    private readonly PasswordFactory _passwordFactory;
+    private readonly ReminderFactory _reminderFactory;
 
     public InMemoryStorageServiceTests()
     {
         _storageService = new InMemoryStorageService();
+        _noteFactory = new NoteFactory(TimeProvider.System);
+        _passwordFactory = new PasswordFactory(TimeProvider.System);
+        _reminderFactory = new ReminderFactory(TimeProvider.System);
     }
 
     [Fact]
     public async Task CreateNote_ShouldAddNoteToStorage()
     {
-        var note = Note.Create("Test Note", "Test Content", ["tag1", "tag2"]);
+        var note = _noteFactory.Create("Test Note", "Test Content", ["tag1", "tag2"]);
 
         var result = await _storageService.CreateNoteAsync(note);
 
@@ -28,7 +35,7 @@ public class InMemoryStorageServiceTests
     [Fact]
     public async Task GetNoteById_ShouldReturnNote_WhenExists()
     {
-        var note = Note.Create("Test", "Content");
+        var note = _noteFactory.Create("Test", "Content");
         await _storageService.CreateNoteAsync(note);
 
         var result = await _storageService.GetNoteByIdAsync(note.Id);
@@ -48,8 +55,8 @@ public class InMemoryStorageServiceTests
     [Fact]
     public async Task GetAllNotes_ShouldReturnAllNotes()
     {
-        var note1 = Note.Create("Note 1", "Content 1");
-        var note2 = Note.Create("Note 2", "Content 2");
+        var note1 = _noteFactory.Create("Note 1", "Content 1");
+        var note2 = _noteFactory.Create("Note 2", "Content 2");
         await _storageService.CreateNoteAsync(note1);
         await _storageService.CreateNoteAsync(note2);
 
@@ -62,9 +69,9 @@ public class InMemoryStorageServiceTests
     [Fact]
     public async Task UpdateNote_ShouldUpdateExistingNote()
     {
-        var note = Note.Create("Original", "Original Content");
+        var note = _noteFactory.Create("Original", "Original Content");
         await _storageService.CreateNoteAsync(note);
-        var updated = note.WithUpdate("Updated", "Updated Content");
+        var updated = _noteFactory.WithUpdate(note, "Updated", "Updated Content");
 
         var result = await _storageService.UpdateNoteAsync(note.Id, updated);
 
@@ -76,7 +83,7 @@ public class InMemoryStorageServiceTests
     [Fact]
     public async Task UpdateNote_ShouldReturnNull_WhenNotExists()
     {
-        var note = Note.Create("Test", "Content");
+        var note = _noteFactory.Create("Test", "Content");
         var result = await _storageService.UpdateNoteAsync(Guid.NewGuid(), note);
 
         Assert.Null(result);
@@ -85,7 +92,7 @@ public class InMemoryStorageServiceTests
     [Fact]
     public async Task DeleteNote_ShouldRemoveNote()
     {
-        var note = Note.Create("Test", "Content");
+        var note = _noteFactory.Create("Test", "Content");
         await _storageService.CreateNoteAsync(note);
 
         var deleted = await _storageService.DeleteNoteAsync(note.Id);
@@ -106,7 +113,7 @@ public class InMemoryStorageServiceTests
     [Fact]
     public async Task CreatePassword_ShouldAddPasswordToStorage()
     {
-        var password = Password.Create("Test", "user", "encrypted123", "https://example.com", "Notes");
+        var password = _passwordFactory.Create("Test", "user", "encrypted123", "https://example.com", "Notes");
 
         var result = await _storageService.CreatePasswordAsync(password);
 
@@ -119,8 +126,8 @@ public class InMemoryStorageServiceTests
     [Fact]
     public async Task GetAllPasswords_ShouldReturnAllPasswords()
     {
-        var pwd1 = Password.Create("Pwd 1", "user1", "enc1");
-        var pwd2 = Password.Create("Pwd 2", "user2", "enc2");
+        var pwd1 = _passwordFactory.Create("Pwd 1", "user1", "enc1");
+        var pwd2 = _passwordFactory.Create("Pwd 2", "user2", "enc2");
         await _storageService.CreatePasswordAsync(pwd1);
         await _storageService.CreatePasswordAsync(pwd2);
 
@@ -133,9 +140,9 @@ public class InMemoryStorageServiceTests
     [Fact]
     public async Task UpdatePassword_ShouldUpdateExistingPassword()
     {
-        var password = Password.Create("Original", "user", "enc");
+        var password = _passwordFactory.Create("Original", "user", "enc");
         await _storageService.CreatePasswordAsync(password);
-        var updated = password.WithUpdate("Updated", "newuser", "newenc");
+        var updated = _passwordFactory.WithUpdate(password, "Updated", "newuser", "newenc");
 
         var result = await _storageService.UpdatePasswordAsync(password.Id, updated);
 
@@ -147,7 +154,7 @@ public class InMemoryStorageServiceTests
     [Fact]
     public async Task DeletePassword_ShouldRemovePassword()
     {
-        var password = Password.Create("Test", "user", "enc");
+        var password = _passwordFactory.Create("Test", "user", "enc");
         await _storageService.CreatePasswordAsync(password);
 
         var deleted = await _storageService.DeletePasswordAsync(password.Id);
@@ -160,7 +167,7 @@ public class InMemoryStorageServiceTests
     [Fact]
     public async Task CreateReminder_ShouldAddReminderToStorage()
     {
-        var reminder = Reminder.Create("Test", "Description", DateTimeOffset.UtcNow.AddDays(1));
+        var reminder = _reminderFactory.Create("Test", "Description", TimeProvider.System.GetUtcNow().AddDays(1));
 
         var result = await _storageService.CreateReminderAsync(reminder);
 
@@ -173,8 +180,8 @@ public class InMemoryStorageServiceTests
     [Fact]
     public async Task GetAllReminders_ShouldReturnAllReminders()
     {
-        var rem1 = Reminder.Create("Rem 1", "Desc 1");
-        var rem2 = Reminder.Create("Rem 2", "Desc 2");
+        var rem1 = _reminderFactory.Create("Rem 1", "Desc 1");
+        var rem2 = _reminderFactory.Create("Rem 2", "Desc 2");
         await _storageService.CreateReminderAsync(rem1);
         await _storageService.CreateReminderAsync(rem2);
 
@@ -187,9 +194,9 @@ public class InMemoryStorageServiceTests
     [Fact]
     public async Task UpdateReminder_ShouldUpdateExistingReminder()
     {
-        var reminder = Reminder.Create("Original", "Original Desc");
+        var reminder = _reminderFactory.Create("Original", "Original Desc");
         await _storageService.CreateReminderAsync(reminder);
-        var updated = reminder.WithUpdate("Updated", "Updated Desc", null, true);
+        var updated = _reminderFactory.WithUpdate(reminder, "Updated", "Updated Desc", null, true);
 
         var result = await _storageService.UpdateReminderAsync(reminder.Id, updated);
 
@@ -201,7 +208,7 @@ public class InMemoryStorageServiceTests
     [Fact]
     public async Task DeleteReminder_ShouldRemoveReminder()
     {
-        var reminder = Reminder.Create("Test", "Desc");
+        var reminder = _reminderFactory.Create("Test", "Desc");
         await _storageService.CreateReminderAsync(reminder);
 
         var deleted = await _storageService.DeleteReminderAsync(reminder.Id);

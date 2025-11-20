@@ -1,6 +1,7 @@
 using Dadstart.Labs.Crow.Api.Services;
 using Dadstart.Labs.Crow.Models;
 using Dadstart.Labs.Crow.Models.Dtos;
+using Dadstart.Labs.Crow.Models.Factories;
 using Microsoft.Extensions.Configuration;
 using Moq;
 
@@ -11,6 +12,7 @@ public class AuthServiceTests
     private readonly Mock<IStorageService> _mockStorage;
     private readonly Mock<IPasswordHasher> _mockPasswordHasher;
     private readonly Mock<IJwtTokenService> _mockJwtTokenService;
+    private readonly UserFactory _userFactory;
     private readonly AuthService _authService;
 
     public AuthServiceTests()
@@ -18,7 +20,8 @@ public class AuthServiceTests
         _mockStorage = new Mock<IStorageService>();
         _mockPasswordHasher = new Mock<IPasswordHasher>();
         _mockJwtTokenService = new Mock<IJwtTokenService>();
-        _authService = new AuthService(_mockStorage.Object, _mockPasswordHasher.Object, _mockJwtTokenService.Object);
+        _userFactory = new UserFactory(TimeProvider.System);
+        _authService = new AuthService(_mockStorage.Object, _mockPasswordHasher.Object, _mockJwtTokenService.Object, _userFactory);
     }
 
     [Fact]
@@ -26,7 +29,7 @@ public class AuthServiceTests
     {
         var dto = new RegisterDto("testuser", "test@example.com", "password123");
         var passwordHash = "hashedPassword";
-        var user = User.Create(dto.Username, dto.Email, passwordHash);
+        var user = _userFactory.Create(dto.Username, dto.Email, passwordHash);
         var token = "jwt_token";
 
         _mockStorage.Setup(s => s.GetUserByUsernameAsync(dto.Username)).ReturnsAsync((User?)null);
@@ -47,7 +50,7 @@ public class AuthServiceTests
     public async Task RegisterAsync_ShouldReturnNull_WhenUsernameExists()
     {
         var dto = new RegisterDto("testuser", "test@example.com", "password123");
-        var existingUser = User.Create("testuser", "other@example.com", "hash");
+        var existingUser = _userFactory.Create("testuser", "other@example.com", "hash");
 
         _mockStorage.Setup(s => s.GetUserByUsernameAsync(dto.Username)).ReturnsAsync(existingUser);
 
@@ -61,7 +64,7 @@ public class AuthServiceTests
     public async Task RegisterAsync_ShouldReturnNull_WhenEmailExists()
     {
         var dto = new RegisterDto("testuser", "test@example.com", "password123");
-        var existingUser = User.Create("otheruser", "test@example.com", "hash");
+        var existingUser = _userFactory.Create("otheruser", "test@example.com", "hash");
 
         _mockStorage.Setup(s => s.GetUserByUsernameAsync(dto.Username)).ReturnsAsync((User?)null);
         _mockStorage.Setup(s => s.GetUserByEmailAsync(dto.Email)).ReturnsAsync(existingUser);
@@ -77,7 +80,7 @@ public class AuthServiceTests
     {
         var dto = new LoginDto("testuser", "password123");
         var passwordHash = "hashedPassword";
-        var user = User.Create(dto.Username, "test@example.com", passwordHash);
+        var user = _userFactory.Create(dto.Username, "test@example.com", passwordHash);
         var token = "jwt_token";
 
         _mockStorage.Setup(s => s.GetUserByUsernameAsync(dto.Username)).ReturnsAsync(user);
@@ -108,7 +111,7 @@ public class AuthServiceTests
     {
         var dto = new LoginDto("testuser", "wrongpassword");
         var passwordHash = "hashedPassword";
-        var user = User.Create(dto.Username, "test@example.com", passwordHash);
+        var user = _userFactory.Create(dto.Username, "test@example.com", passwordHash);
 
         _mockStorage.Setup(s => s.GetUserByUsernameAsync(dto.Username)).ReturnsAsync(user);
         _mockPasswordHasher.Setup(h => h.VerifyPassword(dto.Password, passwordHash)).Returns(false);

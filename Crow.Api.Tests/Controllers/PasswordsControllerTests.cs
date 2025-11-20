@@ -2,6 +2,7 @@ using Dadstart.Labs.Crow.Api.Controllers;
 using Dadstart.Labs.Crow.Api.Services;
 using Dadstart.Labs.Crow.Models;
 using Dadstart.Labs.Crow.Models.Dtos;
+using Dadstart.Labs.Crow.Models.Factories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -11,13 +12,15 @@ public class PasswordsControllerTests
 {
     private readonly Mock<IStorageService> _mockStorage;
     private readonly Mock<IEncryptionService> _mockEncryption;
+    private readonly PasswordFactory _passwordFactory;
     private readonly PasswordsController _controller;
 
     public PasswordsControllerTests()
     {
         _mockStorage = new Mock<IStorageService>();
         _mockEncryption = new Mock<IEncryptionService>();
-        _controller = new PasswordsController(_mockStorage.Object, _mockEncryption.Object);
+        _passwordFactory = new PasswordFactory(TimeProvider.System);
+        _controller = new PasswordsController(_mockStorage.Object, _mockEncryption.Object, _passwordFactory);
         
         _mockEncryption.Setup(e => e.Encrypt(It.IsAny<string>())).Returns<string>(s => $"encrypted_{s}");
         _mockEncryption.Setup(e => e.Decrypt(It.IsAny<string>())).Returns<string>(s => s.Replace("encrypted_", ""));
@@ -28,8 +31,8 @@ public class PasswordsControllerTests
     {
         var passwords = new List<Password>
         {
-            Password.Create("Pwd 1", "user1", "enc1"),
-            Password.Create("Pwd 2", "user2", "enc2")
+            _passwordFactory.Create("Pwd 1", "user1", "enc1"),
+            _passwordFactory.Create("Pwd 2", "user2", "enc2")
         };
         _mockStorage.Setup(s => s.GetAllPasswordsAsync()).ReturnsAsync(passwords);
 
@@ -43,7 +46,7 @@ public class PasswordsControllerTests
     [Fact]
     public async Task GetById_ShouldReturnPassword_WhenExists()
     {
-        var password = Password.Create("Test", "user", "enc");
+        var password = _passwordFactory.Create("Test", "user", "enc");
         _mockStorage.Setup(s => s.GetPasswordByIdAsync(password.Id)).ReturnsAsync(password);
 
         var result = await _controller.GetById(password.Id);
@@ -58,7 +61,7 @@ public class PasswordsControllerTests
     {
         var dto = new CreatePasswordDto("Test", "user", "plainPassword", "https://example.com", "Notes");
         var encryptedPassword = "encrypted_plainPassword";
-        var password = Password.Create(dto.Title, dto.Username, encryptedPassword, dto.Url, dto.Notes);
+        var password = _passwordFactory.Create(dto.Title, dto.Username, encryptedPassword, dto.Url, dto.Notes);
         
         _mockStorage.Setup(s => s.CreatePasswordAsync(It.IsAny<Password>())).ReturnsAsync(password);
 
@@ -73,9 +76,9 @@ public class PasswordsControllerTests
     [Fact]
     public async Task Update_ShouldUpdatePassword_WhenExists()
     {
-        var password = Password.Create("Original", "user", "encrypted_old");
+        var password = _passwordFactory.Create("Original", "user", "encrypted_old");
         var dto = new UpdatePasswordDto("Updated", "newuser", "newplain", null, null);
-        var updated = password.WithUpdate(dto.Title, dto.Username, "encrypted_newplain", dto.Url, dto.Notes);
+        var updated = _passwordFactory.WithUpdate(password, dto.Title, dto.Username, "encrypted_newplain", dto.Url, dto.Notes);
         
         _mockStorage.Setup(s => s.GetPasswordByIdAsync(password.Id)).ReturnsAsync(password);
         _mockStorage.Setup(s => s.UpdatePasswordAsync(password.Id, It.IsAny<Password>())).ReturnsAsync(updated);

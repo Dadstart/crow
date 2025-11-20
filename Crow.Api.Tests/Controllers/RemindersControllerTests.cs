@@ -2,6 +2,7 @@ using Dadstart.Labs.Crow.Api.Controllers;
 using Dadstart.Labs.Crow.Api.Services;
 using Dadstart.Labs.Crow.Models;
 using Dadstart.Labs.Crow.Models.Dtos;
+using Dadstart.Labs.Crow.Models.Factories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -10,12 +11,14 @@ namespace Dadstart.Labs.Crow.Api.Tests.Controllers;
 public class RemindersControllerTests
 {
     private readonly Mock<IStorageService> _mockStorage;
+    private readonly ReminderFactory _reminderFactory;
     private readonly RemindersController _controller;
 
     public RemindersControllerTests()
     {
         _mockStorage = new Mock<IStorageService>();
-        _controller = new RemindersController(_mockStorage.Object);
+        _reminderFactory = new ReminderFactory(TimeProvider.System);
+        _controller = new RemindersController(_mockStorage.Object, _reminderFactory);
     }
 
     [Fact]
@@ -23,8 +26,8 @@ public class RemindersControllerTests
     {
         var reminders = new List<Reminder>
         {
-            Reminder.Create("Rem 1", "Desc 1"),
-            Reminder.Create("Rem 2", "Desc 2")
+            _reminderFactory.Create("Rem 1", "Desc 1"),
+            _reminderFactory.Create("Rem 2", "Desc 2")
         };
         _mockStorage.Setup(s => s.GetAllRemindersAsync()).ReturnsAsync(reminders);
 
@@ -38,7 +41,7 @@ public class RemindersControllerTests
     [Fact]
     public async Task GetById_ShouldReturnReminder_WhenExists()
     {
-        var reminder = Reminder.Create("Test", "Desc");
+        var reminder = _reminderFactory.Create("Test", "Desc");
         _mockStorage.Setup(s => s.GetReminderByIdAsync(reminder.Id)).ReturnsAsync(reminder);
 
         var result = await _controller.GetById(reminder.Id);
@@ -51,9 +54,9 @@ public class RemindersControllerTests
     [Fact]
     public async Task Create_ShouldCreateReminder()
     {
-        var dueDate = DateTimeOffset.UtcNow.AddDays(1);
+        var dueDate = TimeProvider.System.GetUtcNow().AddDays(1);
         var dto = new CreateReminderDto("Test", "Description", dueDate);
-        var reminder = Reminder.Create(dto.Title, dto.Description, dto.DueDate);
+        var reminder = _reminderFactory.Create(dto.Title, dto.Description, dto.DueDate);
         _mockStorage.Setup(s => s.CreateReminderAsync(It.IsAny<Reminder>())).ReturnsAsync(reminder);
 
         var result = await _controller.Create(dto);
@@ -66,9 +69,9 @@ public class RemindersControllerTests
     [Fact]
     public async Task Update_ShouldUpdateReminder_WhenExists()
     {
-        var reminder = Reminder.Create("Original", "Original Desc");
+        var reminder = _reminderFactory.Create("Original", "Original Desc");
         var dto = new UpdateReminderDto("Updated", "Updated Desc", null, true);
-        var updated = reminder.WithUpdate(dto.Title, dto.Description, dto.DueDate, dto.IsCompleted);
+        var updated = _reminderFactory.WithUpdate(reminder, dto.Title, dto.Description, dto.DueDate, dto.IsCompleted);
         
         _mockStorage.Setup(s => s.GetReminderByIdAsync(reminder.Id)).ReturnsAsync(reminder);
         _mockStorage.Setup(s => s.UpdateReminderAsync(reminder.Id, It.IsAny<Reminder>())).ReturnsAsync(updated);

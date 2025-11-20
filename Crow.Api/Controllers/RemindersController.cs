@@ -1,6 +1,7 @@
 using Dadstart.Labs.Crow.Api.Services;
 using Dadstart.Labs.Crow.Models;
 using Dadstart.Labs.Crow.Models.Dtos;
+using Dadstart.Labs.Crow.Models.Factories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ namespace Dadstart.Labs.Crow.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class RemindersController(IStorageService storageService) : ControllerBase
+public class RemindersController(IStorageService storageService, ReminderFactory reminderFactory) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<List<Reminder>>> GetAll()
@@ -31,7 +32,7 @@ public class RemindersController(IStorageService storageService) : ControllerBas
     [HttpPost]
     public async Task<ActionResult<Reminder>> Create([FromBody] CreateReminderDto dto)
     {
-        var reminder = Reminder.Create(dto.Title, dto.Description, dto.DueDate);
+        var reminder = reminderFactory.Create(dto.Title, dto.Description, dto.DueDate);
         var created = await storageService.CreateReminderAsync(reminder);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
@@ -43,7 +44,7 @@ public class RemindersController(IStorageService storageService) : ControllerBas
         if (existing == null)
             return NotFound();
 
-        var updated = existing.WithUpdate(dto.Title, dto.Description, dto.DueDate, dto.IsCompleted);
+        var updated = reminderFactory.WithUpdate(existing, dto.Title, dto.Description, dto.DueDate, dto.IsCompleted);
         var result = await storageService.UpdateReminderAsync(id, updated);
         return Ok(result);
     }

@@ -2,6 +2,7 @@ using Dadstart.Labs.Crow.Api.Controllers;
 using Dadstart.Labs.Crow.Api.Services;
 using Dadstart.Labs.Crow.Models;
 using Dadstart.Labs.Crow.Models.Dtos;
+using Dadstart.Labs.Crow.Models.Factories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -10,12 +11,14 @@ namespace Dadstart.Labs.Crow.Api.Tests.Controllers;
 public class NotesControllerTests
 {
     private readonly Mock<IStorageService> _mockStorage;
+    private readonly NoteFactory _noteFactory;
     private readonly NotesController _controller;
 
     public NotesControllerTests()
     {
         _mockStorage = new Mock<IStorageService>();
-        _controller = new NotesController(_mockStorage.Object);
+        _noteFactory = new NoteFactory(TimeProvider.System);
+        _controller = new NotesController(_mockStorage.Object, _noteFactory);
     }
 
     [Fact]
@@ -23,8 +26,8 @@ public class NotesControllerTests
     {
         var notes = new List<Note>
         {
-            Note.Create("Note 1", "Content 1"),
-            Note.Create("Note 2", "Content 2")
+            _noteFactory.Create("Note 1", "Content 1"),
+            _noteFactory.Create("Note 2", "Content 2")
         };
         _mockStorage.Setup(s => s.GetAllNotesAsync()).ReturnsAsync(notes);
 
@@ -38,7 +41,7 @@ public class NotesControllerTests
     [Fact]
     public async Task GetById_ShouldReturnNote_WhenExists()
     {
-        var note = Note.Create("Test", "Content");
+        var note = _noteFactory.Create("Test", "Content");
         _mockStorage.Setup(s => s.GetNoteByIdAsync(note.Id)).ReturnsAsync(note);
 
         var result = await _controller.GetById(note.Id);
@@ -63,7 +66,7 @@ public class NotesControllerTests
     public async Task Create_ShouldCreateNote()
     {
         var dto = new CreateNoteDto("Test", "Content", ["tag1"]);
-        var note = Note.Create(dto.Title, dto.Content, dto.Tags);
+        var note = _noteFactory.Create(dto.Title, dto.Content, dto.Tags);
         _mockStorage.Setup(s => s.CreateNoteAsync(It.IsAny<Note>())).ReturnsAsync(note);
 
         var result = await _controller.Create(dto);
@@ -77,9 +80,9 @@ public class NotesControllerTests
     [Fact]
     public async Task Update_ShouldUpdateNote_WhenExists()
     {
-        var note = Note.Create("Original", "Original Content");
+        var note = _noteFactory.Create("Original", "Original Content");
         var dto = new UpdateNoteDto("Updated", "Updated Content", null);
-        var updated = note.WithUpdate(dto.Title, dto.Content, dto.Tags);
+        var updated = _noteFactory.WithUpdate(note, dto.Title, dto.Content, dto.Tags);
         
         _mockStorage.Setup(s => s.GetNoteByIdAsync(note.Id)).ReturnsAsync(note);
         _mockStorage.Setup(s => s.UpdateNoteAsync(note.Id, It.IsAny<Note>())).ReturnsAsync(updated);

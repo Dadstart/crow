@@ -1,6 +1,6 @@
 using Dadstart.Labs.Crow.Models;
-using Dadstart.Labs.Crow.Models;
 using Dadstart.Labs.Crow.Models.Dtos;
+using Dadstart.Labs.Crow.Models.Factories;
 
 namespace Dadstart.Labs.Crow.Api.Services;
 
@@ -9,12 +9,14 @@ public class AuthService : IAuthService
     private readonly IStorageService _storageService;
     private readonly IPasswordHasher _passwordHasher;
     private readonly IJwtTokenService _jwtTokenService;
+    private readonly UserFactory _userFactory;
 
-    public AuthService(IStorageService storageService, IPasswordHasher passwordHasher, IJwtTokenService jwtTokenService)
+    public AuthService(IStorageService storageService, IPasswordHasher passwordHasher, IJwtTokenService jwtTokenService, UserFactory userFactory)
     {
         _storageService = storageService;
         _passwordHasher = passwordHasher;
         _jwtTokenService = jwtTokenService;
+        _userFactory = userFactory;
     }
 
     public async Task<AuthResponseDto?> RegisterAsync(RegisterDto dto)
@@ -26,7 +28,7 @@ public class AuthService : IAuthService
             return null;
 
         var passwordHash = _passwordHasher.HashPassword(dto.Password);
-        var user = User.Create(dto.Username, dto.Email, passwordHash);
+        var user = _userFactory.Create(dto.Username, dto.Email, passwordHash);
         var created = await _storageService.CreateUserAsync(user);
 
         var token = _jwtTokenService.GenerateToken(created.Id, created.Username);

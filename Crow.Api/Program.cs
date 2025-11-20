@@ -1,5 +1,6 @@
 using System.Text;
 using Dadstart.Labs.Crow.Api.Services;
+using Dadstart.Labs.Crow.Models.Factories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -8,6 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
+
+builder.Services.AddSingleton<TimeProvider>(TimeProvider.System);
+
+builder.Services.AddSingleton<UserFactory>();
+builder.Services.AddSingleton<ReminderFactory>();
+builder.Services.AddSingleton<NoteFactory>();
+builder.Services.AddSingleton<PasswordFactory>();
 
 builder.Services.AddSingleton<IStorageService, InMemoryStorageService>();
 builder.Services.AddSingleton<IEncryptionService, AesEncryptionService>();

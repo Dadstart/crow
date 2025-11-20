@@ -12,13 +12,15 @@ public class JwtTokenService : IJwtTokenService
     private readonly string _issuer;
     private readonly string _audience;
     private readonly int _expirationMinutes;
+    private readonly TimeProvider _timeProvider;
 
-    public JwtTokenService(IConfiguration configuration)
+    public JwtTokenService(IConfiguration configuration, TimeProvider timeProvider)
     {
         _secretKey = configuration["Jwt:SecretKey"] ?? throw new InvalidOperationException("Jwt:SecretKey must be configured");
         _issuer = configuration["Jwt:Issuer"] ?? "CrowApi";
         _audience = configuration["Jwt:Audience"] ?? "CrowApp";
         _expirationMinutes = int.Parse(configuration["Jwt:ExpirationMinutes"] ?? "1440");
+        _timeProvider = timeProvider;
     }
 
     public string GenerateToken(Guid userId, string username)
@@ -37,7 +39,7 @@ public class JwtTokenService : IJwtTokenService
             issuer: _issuer,
             audience: _audience,
             claims: claims,
-            expires: DateTimeOffset.UtcNow.AddMinutes(_expirationMinutes).DateTime,
+            expires: _timeProvider.GetUtcNow().AddMinutes(_expirationMinutes).DateTime,
             signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
