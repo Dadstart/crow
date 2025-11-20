@@ -1,0 +1,6 @@
+@Crow.Api_HostAddress = http://localhost:5064
+
+GET {{Crow.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

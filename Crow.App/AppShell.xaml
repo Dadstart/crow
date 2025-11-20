@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Dadstart.Labs.Crow.App.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Dadstart.Labs.Crow.App.Pages"
+    Title="Crow">
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate pages:LoginPage}"
+        Route="LoginPage" />
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate pages:MainPage}"
+        Route="MainPage" />
+    <ShellContent
+        Title="Notes"
+        ContentTemplate="{DataTemplate pages:NotesPage}"
+        Route="NotesPage" />
+    <ShellContent
+        Title="Passwords"
+        ContentTemplate="{DataTemplate pages:PasswordsPage}"
+        Route="PasswordsPage" />
+    <ShellContent
+        Title="Reminders"
+        ContentTemplate="{DataTemplate pages:RemindersPage}"
+        Route="RemindersPage" />
+</Shell>

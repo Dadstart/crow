@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Dadstart.Labs.Crow.App.Pages.NotesPage"
+             x:DataType="viewModels:NotesPageViewModel"
+             xmlns:viewModels="clr-namespace:Dadstart.Labs.Crow.App.ViewModels"
+             xmlns:models="clr-namespace:Dadstart.Labs.Crow.Models;assembly=Crow.Models"
+             xmlns:converters="clr-namespace:Dadstart.Labs.Crow.App.Converters"
+             Title="Notes">
+    <ContentPage.Resources>
+        <converters:ListToStringConverter x:Key="ListToStringConverter" />
+    </ContentPage.Resources>
+    <Grid RowDefinitions="Auto,*" Padding="10">
+        <VerticalStackLayout Grid.Row="0" Spacing="10" Padding="10">
+            <Entry Text="{Binding Title}" Placeholder="Title" />
+            <Editor Text="{Binding Content}" Placeholder="Content" HeightRequest="100" />
+            <Entry Text="{Binding Tags}" Placeholder="Tags (comma-separated)" />
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                <Button Grid.Column="0" 
+                        Text="Create"
+                        Command="{Binding CreateNoteCommand}" />
+                <Button Grid.Column="1" 
+                        Text="Update"
+                        Command="{Binding UpdateNoteCommand}"
+                        CommandParameter="{Binding SelectedNote}" />
+            </Grid>
+            <Button Text="Clear Selection" 
+                    Command="{Binding ClearSelectionCommand}" />
+        </VerticalStackLayout>
+        
+        <RefreshView Grid.Row="1" 
+                     IsRefreshing="{Binding IsLoading}"
+                     Command="{Binding LoadNotesCommand}">
+            <CollectionView ItemsSource="{Binding Notes}" SelectionMode="Single" SelectionChanged="OnNoteSelected">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Note">
+                        <Grid Padding="10" ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Grid.Column="0">
+                                <Label Text="{Binding Title}" FontAttributes="Bold" />
+                                <Label Text="{Binding Content}" LineBreakMode="TailTruncation" />
+                                <Label Text="{Binding Tags, Converter={StaticResource ListToStringConverter}}" 
+                                       FontSize="12" TextColor="Gray" />
+                            </VerticalStackLayout>
+                            <Button Grid.Column="1" 
+                                    Text="Delete"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:NotesPageViewModel}}, Path=DeleteNoteCommand}"
+                                    CommandParameter="{Binding .}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

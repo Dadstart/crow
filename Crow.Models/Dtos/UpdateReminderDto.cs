@@ -1,0 +1,4 @@
+namespace Dadstart.Labs.Crow.Models.Dtos;
+
+public record UpdateReminderDto(string? Title, string? Description, DateTime? DueDate, bool? IsCompleted);
+

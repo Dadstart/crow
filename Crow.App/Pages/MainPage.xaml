@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Dadstart.Labs.Crow.App.Pages.MainPage"
+             x:DataType="viewModels:MainPageViewModel"
+             xmlns:viewModels="clr-namespace:Dadstart.Labs.Crow.App.ViewModels"
+             Title="Crow">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <Label Text="Welcome to Crow" 
+                   Style="{StaticResource Headline}"
+                   HorizontalOptions="Center" />
+            
+            <Label Text="Your secure notes, passwords, and reminders" 
+                   Style="{StaticResource SubHeadline}"
+                   HorizontalOptions="Center" />
+            
+            <Button Text="Notes" 
+                    Command="{Binding GoToNotesCommand}"
+                    HorizontalOptions="Fill" />
+            
+            <Button Text="Passwords" 
+                    Command="{Binding GoToPasswordsCommand}"
+                    HorizontalOptions="Fill" />
+            
+            <Button Text="Reminders" 
+                    Command="{Binding GoToRemindersCommand}"
+                    HorizontalOptions="Fill" />
+            
+            <Label Text="{Binding Username, StringFormat='Logged in as: {0}'}" 
+                   HorizontalOptions="Center"
+                   Margin="0,20,0,0" />
+            
+            <Button Text="Logout" 
+                    Command="{Binding LogoutCommand}"
+                    HorizontalOptions="Fill" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+

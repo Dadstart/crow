@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Dadstart.Labs.Crow.App.Pages.LoginPage"
+             x:DataType="viewModels:LoginPageViewModel"
+             xmlns:viewModels="clr-namespace:Dadstart.Labs.Crow.App.ViewModels"
+             Title="Crow">
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
+            <Label Text="Crow" 
+                   Style="{StaticResource Headline}"
+                   HorizontalOptions="Center" />
+            
+            <Label Text="Login" 
+                   Style="{StaticResource SubHeadline}"
+                   HorizontalOptions="Center"
+                   x:Name="LoginLabel" />
+            
+            <Label Text="Register" 
+                   Style="{StaticResource SubHeadline}"
+                   HorizontalOptions="Center"
+                   x:Name="RegisterLabel"
+                   IsVisible="False" />
+            
+            <Entry Text="{Binding Username}" 
+                   Placeholder="Username" />
+            
+            <Entry Text="{Binding Email}" 
+                   Placeholder="Email" 
+                   x:Name="EmailEntry"
+                   Keyboard="Email"
+                   IsVisible="False" />
+            
+            <Entry Text="{Binding Password}" 
+                   Placeholder="Password" 
+                   IsPassword="True" />
+            
+            <Label Text="{Binding ErrorMessage}" 
+                   TextColor="Red"
+                   x:Name="ErrorLabel"
+                   IsVisible="False" />
+            
+            <Button Text="Login"
+                    Command="{Binding LoginCommand}"
+                    x:Name="LoginButton" />
+            
+            <Button Text="Register"
+                    Command="{Binding RegisterCommand}"
+                    x:Name="RegisterButton"
+                    IsVisible="False" />
+            
+            <Button Text="Switch to Register"
+                    Command="{Binding ToggleModeCommand}"
+                    x:Name="SwitchToRegisterButton" />
+            
+            <Button Text="Switch to Login"
+                    Command="{Binding ToggleModeCommand}"
+                    x:Name="SwitchToLoginButton"
+                    IsVisible="False" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
