@@ -24,7 +24,7 @@
 #### General
 
 - Use C# 14
-- Root C# namespace is Dadstart.Labs.MediaForge
+- Root C# namespace is Dadstart.Labs.Crow
 - Do not add copyright file headers to C# files
 - Do not use StyleCop
 - Do not use `this.` when unneeded
@@ -95,13 +95,6 @@
 ## Terminal / Scripting
 
 - Use PowerShell 7.5 for cross-platform scripting
-
-## Architecture
-
-- Modern cross-platform dotnet library that implements:
-  - 'MediaForge' PowerShell module with cmdlets
-  - PSProvider for browsing the internal streams of media files
-  - Class types with PowerShell custom formatting
 
 ## CI/CD
 
