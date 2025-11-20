@@ -66,6 +66,7 @@
 ### Windows
 
 - Windows 11 24H2 (26100.7178) and newer
+- Allow features from version 25H2 and newer that gracefully degrade when running on version 24H2.
 
 ### Mac
 
