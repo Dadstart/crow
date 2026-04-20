@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Crow.Views.NoteDetailPage"
+             Title="{Binding PageTitle}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="OnSaveClicked"
+                     Order="Primary"
+                     Priority="0"
+                     Text="Save" />
+        <ToolbarItem Clicked="OnDeleteClicked"
+                     Order="Secondary"
+                     Priority="1"
+                     Text="Delete" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16"
+                             Spacing="14"
+                             MaximumWidthRequest="720"
+                             HorizontalOptions="Center">
+
+            <Entry Placeholder="Title"
+                   SemanticProperties.Hint="Note title"
+                   Text="{Binding CurrentNote.Title}" />
+
+            <Editor AutoSize="TextChanges"
+                    Placeholder="Content"
+                    SemanticProperties.Hint="Note body"
+                    Text="{Binding CurrentNote.Content}" />
+
+            <Entry Placeholder="Tags (comma-separated)"
+                   SemanticProperties.Hint="Comma separated tags"
+                   Text="{Binding TagsText}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

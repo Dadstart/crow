@@ -1,5 +1,4 @@
 using Crow.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Crow.Views;
 
@@ -20,17 +19,7 @@ public partial class TaskDetailPage : ContentPage
     public TaskDetailPage()
     {
         InitializeComponent();
-        HandlerChanged += OnHandlerChanged;
-    }
-
-    void OnHandlerChanged(object? sender, EventArgs e)
-    {
-        if (Handler?.MauiContext?.Services is not IServiceProvider services)
-            return;
-
-        HandlerChanged -= OnHandlerChanged;
-        BindingContext = services.GetRequiredService<TaskDetailViewModel>();
-        TryApplyQuery();
+        PageViewModel.AttachWhenReady<TaskDetailViewModel>(this, TryApplyQuery);
     }
 
     void TryApplyQuery()

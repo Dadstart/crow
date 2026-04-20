@@ -26,6 +26,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<NoteRepository>();
         builder.Services.AddTransient<TaskListViewModel>();
         builder.Services.AddTransient<TaskDetailViewModel>();
+        builder.Services.AddTransient<NoteListViewModel>();
+        builder.Services.AddTransient<NoteDetailViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

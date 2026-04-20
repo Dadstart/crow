@@ -6,9 +6,15 @@
     xmlns:views="clr-namespace:Crow.Views"
     Title="crow">
 
-    <ShellContent
-        Title="Tasks"
-        ContentTemplate="{DataTemplate views:TaskListPage}"
-        Route="TaskListPage" />
+    <TabBar>
+        <ShellContent
+            Title="Tasks"
+            ContentTemplate="{DataTemplate views:TaskListPage}"
+            Route="TaskListPage" />
+        <ShellContent
+            Title="Notes"
+            ContentTemplate="{DataTemplate views:NoteListPage}"
+            Route="NoteListPage" />
+    </TabBar>
 
 </Shell>

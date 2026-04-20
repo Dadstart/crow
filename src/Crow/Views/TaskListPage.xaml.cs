@@ -1,6 +1,5 @@
 using Crow.Models;
 using Crow.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Crow.Views;
 
@@ -9,16 +8,7 @@ public partial class TaskListPage : ContentPage
     public TaskListPage()
     {
         InitializeComponent();
-        HandlerChanged += OnHandlerChanged;
-    }
-
-    void OnHandlerChanged(object? sender, EventArgs e)
-    {
-        if (Handler?.MauiContext?.Services is not IServiceProvider services)
-            return;
-
-        HandlerChanged -= OnHandlerChanged;
-        BindingContext = services.GetRequiredService<TaskListViewModel>();
+        PageViewModel.AttachWhenReady<TaskListViewModel>(this);
     }
 
     protected override async void OnAppearing()
