@@ -50,9 +50,17 @@
                     SemanticProperties.Hint="Task priority"
                     SelectedIndex="{Binding CurrentTask.Priority}" />
 
-            <Entry Placeholder="Due date (yyyy-MM-dd), optional"
-                   SemanticProperties.Hint="Optional due date"
-                   Text="{Binding DueDateText}" />
+            <DatePicker Date="{Binding DueDatePickerValue}"
+                        Format="yyyy-MM-dd"
+                        SemanticProperties.Hint="Task due date"
+                        IsEnabled="{Binding HasDueDate}" />
+
+            <HorizontalStackLayout Spacing="10">
+                <CheckBox IsChecked="{Binding HasDueDate}"
+                          SemanticProperties.Hint="Toggle optional due date" />
+                <Label Text="Has due date"
+                       VerticalTextAlignment="Center" />
+            </HorizontalStackLayout>
 
             <Entry Placeholder="Tags (comma-separated)"
                    SemanticProperties.Hint="Comma separated tags"

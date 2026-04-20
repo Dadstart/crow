@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Windows.Input;
 using Crow.Models;
 using Crow.Repositories;
@@ -13,8 +12,9 @@ public sealed class TaskDetailViewModel : BaseViewModel
     readonly TaskRepository _taskRepository;
 
     TaskItem? _currentTask;
-    string _dueDateText = "";
     string _tagsText = "";
+    DateTime _dueDatePickerValue = DateTime.UtcNow.Date;
+    bool _hasDueDate;
     bool _isNewTask;
 
     public TaskDetailViewModel(TaskRepository taskRepository)
@@ -85,14 +85,28 @@ public sealed class TaskDetailViewModel : BaseViewModel
         }
     }
 
-    public string DueDateText
+    public DateTime DueDatePickerValue
     {
-        get => _dueDateText;
+        get => _dueDatePickerValue;
         set
         {
-            if (_dueDateText == value)
+            var normalized = DateTime.SpecifyKind(value.Date, DateTimeKind.Utc);
+            if (_dueDatePickerValue == normalized)
                 return;
-            _dueDateText = value;
+            _dueDatePickerValue = normalized;
+            HasDueDate = true;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool HasDueDate
+    {
+        get => _hasDueDate;
+        set
+        {
+            if (_hasDueDate == value)
+                return;
+            _hasDueDate = value;
             OnPropertyChanged();
         }
     }
@@ -122,7 +136,8 @@ public sealed class TaskDetailViewModel : BaseViewModel
             Priority = 0,
         };
         TagsText = "";
-        DueDateText = "";
+        DueDatePickerValue = DateTime.UtcNow.Date;
+        HasDueDate = false;
     }
 
     public async Task LoadTaskAsync(Guid id)
@@ -168,7 +183,8 @@ public sealed class TaskDetailViewModel : BaseViewModel
         await _taskRepository.DeleteAsync(task.Id).ConfigureAwait(false);
         CurrentTask = null;
         TagsText = "";
-        DueDateText = "";
+        DueDatePickerValue = DateTime.UtcNow.Date;
+        HasDueDate = false;
     }
 
     public async Task ToggleCompletionAsync(TaskItem task)
@@ -196,10 +212,10 @@ public sealed class TaskDetailViewModel : BaseViewModel
             .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .ToList();
 
-        if (string.IsNullOrWhiteSpace(DueDateText))
+        if (!HasDueDate)
             CurrentTask.DueDate = null;
-        else if (DateTime.TryParse(DueDateText, CultureInfo.InvariantCulture, DateTimeStyles.None, out var due))
-            CurrentTask.DueDate = DateTime.SpecifyKind(due.Date, DateTimeKind.Utc);
+        else
+            CurrentTask.DueDate = DateTime.SpecifyKind(DueDatePickerValue.Date, DateTimeKind.Utc);
     }
 
     void SyncEditorsFromTask()
@@ -208,6 +224,16 @@ public sealed class TaskDetailViewModel : BaseViewModel
             return;
 
         TagsText = string.Join(", ", CurrentTask.Tags);
-        DueDateText = CurrentTask.DueDate?.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) ?? "";
+        if (CurrentTask.DueDate.HasValue)
+        {
+            DueDatePickerValue = DateTime.SpecifyKind(CurrentTask.DueDate.Value.Date, DateTimeKind.Utc);
+            HasDueDate = true;
+        }
+        else
+        {
+            DueDatePickerValue = DateTime.UtcNow.Date;
+            HasDueDate = false;
+        }
     }
+
 }

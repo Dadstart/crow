@@ -27,6 +27,8 @@ public sealed class TaskRepositoryTests
         Assert.Equal(task.Description, loaded.Description);
         Assert.Equal(task.Priority, loaded.Priority);
         Assert.Equal(task.Tags, loaded.Tags);
+        Assert.NotNull(loaded.DueDate);
+        Assert.Equal(task.DueDate?.Date, loaded.DueDate?.Date);
     }
 
     [Fact]
@@ -58,6 +60,30 @@ public sealed class TaskRepositoryTests
         Assert.True(loaded.IsCompleted);
         Assert.Equal(1, loaded.Priority);
         Assert.Equal(["updated"], loaded.Tags);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_can_clear_existing_due_date()
+    {
+        using var scope = new TestDatabaseScope();
+        var task = new TaskItem
+        {
+            Title = "Task with due date",
+            Description = "Will clear due date",
+            Priority = 1,
+            Tags = ["due"],
+            DueDate = DateTime.UtcNow.Date.AddDays(2),
+        };
+
+        await scope.Tasks.AddAsync(task);
+
+        task.DueDate = null;
+        task.UpdatedAt = DateTime.UtcNow;
+        await scope.Tasks.UpdateAsync(task);
+
+        var loaded = await scope.Tasks.GetByIdAsync(task.Id);
+        Assert.NotNull(loaded);
+        Assert.Null(loaded.DueDate);
     }
 
     [Fact]
