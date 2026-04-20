@@ -61,4 +61,12 @@ public sealed class DatabaseService
             cmd.ExecuteNonQuery();
         }
     }
+
+    // Caller must dispose the connection (e.g. await using).
+    public async Task<SqliteConnection> OpenConnectionAsync(CancellationToken cancellationToken = default)
+    {
+        var connection = new SqliteConnection(_connectionString);
+        await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+        return connection;
+    }
 }
