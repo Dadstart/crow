@@ -1,4 +1,4 @@
-﻿namespace crow;
+﻿namespace Crow;
 
 public partial class AppShell : Shell
 {

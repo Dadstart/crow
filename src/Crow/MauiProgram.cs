@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace crow;
+namespace Crow;
 
 public static class MauiProgram
 {

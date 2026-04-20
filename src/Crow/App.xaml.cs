@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace crow;
+namespace Crow;
 
 public partial class App : Application
 {
