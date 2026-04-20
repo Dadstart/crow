@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Crow.ViewModels"
+             x:Class="Crow.Views.TaskDetailPage"
+             Title="{Binding PageTitle}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="OnSaveClicked"
+                     Order="Primary"
+                     Priority="0"
+                     Text="Save" />
+        <ToolbarItem Clicked="OnDeleteClicked"
+                     Order="Secondary"
+                     Priority="1"
+                     Text="Delete" />
+    </ContentPage.ToolbarItems>
+
+    <!-- ScrollView: vertical scroll on small screens / short windows; no fixed content height. -->
+    <ScrollView>
+        <!-- Capped width on large displays keeps line length readable; on narrow screens fills width. -->
+        <VerticalStackLayout Padding="16"
+                             Spacing="14"
+                             MaximumWidthRequest="720"
+                             HorizontalOptions="Fill">
+
+            <Entry Placeholder="Title"
+                   SemanticProperties.Hint="Task title"
+                   Text="{Binding CurrentTask.Title}" />
+
+            <Editor AutoSize="TextChanges"
+                    Placeholder="Description"
+                    SemanticProperties.Hint="Task description"
+                    Text="{Binding CurrentTask.Description}" />
+
+            <!-- FlexLayout: completed row flows left-to-right; wraps if space is tight. -->
+            <FlexLayout AlignItems="Center"
+                        Direction="Row"
+                        JustifyContent="SpaceBetween"
+                        Wrap="Wrap">
+                <Label SemanticProperties.Hint="Whether the task is completed"
+                       Text="Completed"
+                       VerticalTextAlignment="Center" />
+                <Switch IsToggled="{Binding CurrentTask.IsCompleted}"
+                        SemanticProperties.Hint="Toggle task completed" />
+            </FlexLayout>
+
+            <Picker Title="Priority"
+                    ItemsSource="{x:Static vm:TaskDetailViewModel.PriorityOptions}"
+                    SemanticProperties.Hint="Task priority"
+                    SelectedIndex="{Binding CurrentTask.Priority}" />
+
+            <Entry Placeholder="Due date (yyyy-MM-dd), optional"
+                   SemanticProperties.Hint="Optional due date"
+                   Text="{Binding DueDateText}" />
+
+            <Entry Placeholder="Tags (comma-separated)"
+                   SemanticProperties.Hint="Comma separated tags"
+                   Text="{Binding TagsText}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

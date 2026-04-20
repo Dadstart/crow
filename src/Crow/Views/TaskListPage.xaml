@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:Crow.Models"
+             x:Class="Crow.Views.TaskListPage"
+             x:Name="ThisPage"
+             Title="Tasks">
+
+    <!-- Grid: header row (Auto) + list (* fills remaining viewport height). -->
+    <Grid Padding="16"
+          RowDefinitions="Auto,*"
+          RowSpacing="12">
+
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*,Auto"
+              ColumnSpacing="12">
+            <Button Grid.Column="1"
+                    Padding="16,10"
+                    Clicked="OnAddClicked"
+                    HorizontalOptions="End"
+                    SemanticProperties.Hint="Create a new task"
+                    Text="Add task" />
+        </Grid>
+
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Tasks}"
+                        SelectionMode="None"
+                        VerticalOptions="Fill">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:TaskItem">
+                    <!-- Row: flexible title/description (*), intrinsic-width actions (Auto). -->
+                    <Grid Padding="4,10"
+                          ColumnDefinitions="*,Auto,Auto"
+                          ColumnSpacing="10"
+                          RowDefinitions="Auto,Auto">
+                        <VerticalStackLayout Grid.Row="0"
+                                             Grid.RowSpan="2"
+                                             Grid.Column="0"
+                                             Spacing="4">
+                            <Label FontAttributes="Bold"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="2"
+                                   Text="{Binding Title}" />
+                            <Label FontSize="13"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="3"
+                                   Text="{Binding Description}"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray500},
+                                                               Dark={StaticResource Gray300}}" />
+                        </VerticalStackLayout>
+                        <Button Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="1"
+                                Padding="14,10"
+                                Clicked="OnEditClicked"
+                                SemanticProperties.Hint="Edit this task"
+                                Text="Edit"
+                                VerticalOptions="Center" />
+                        <Button Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="2"
+                                Padding="14,10"
+                                Command="{Binding Path=ToggleCompletionCommand, Source={x:Reference ThisPage}}"
+                                CommandParameter="{Binding .}"
+                                SemanticProperties.Hint="Mark task complete or incomplete"
+                                Text="Done"
+                                VerticalOptions="Center" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

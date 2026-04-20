@@ -7,8 +7,8 @@
     Title="crow">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate views:MainPage}"
-        Route="MainPage" />
+        Title="Tasks"
+        ContentTemplate="{DataTemplate views:TaskListPage}"
+        Route="TaskListPage" />
 
 </Shell>
