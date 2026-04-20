@@ -5,7 +5,9 @@
              x:Class="Crow.Views.NoteListPage"
              Title="Notes">
 
-    <Grid Padding="16"
+    <Grid Padding="{OnIdiom Phone='16', Tablet='24', Desktop='32'}"
+          MaximumWidthRequest="{OnIdiom Phone='800', Tablet='980', Desktop='1280'}"
+          HorizontalOptions="Center"
           RowDefinitions="Auto,*"
           RowSpacing="12">
 
@@ -24,31 +26,38 @@
                         ItemsSource="{Binding Notes}"
                         SelectionMode="None"
                         VerticalOptions="Fill">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical"
+                                 Span="{OnIdiom Phone='1', Tablet='2', Desktop='3'}"
+                                 VerticalItemSpacing="10"
+                                 HorizontalItemSpacing="10" />
+            </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:NoteItem">
-                    <Grid Padding="4,10"
-                          ColumnDefinitions="*,Auto"
-                          ColumnSpacing="10">
-                        <VerticalStackLayout Grid.Column="0"
-                                             Spacing="4">
-                            <Label FontAttributes="Bold"
-                                   LineBreakMode="TailTruncation"
-                                   MaxLines="2"
-                                   Text="{Binding Title}" />
-                            <Label FontSize="13"
-                                   LineBreakMode="TailTruncation"
-                                   MaxLines="3"
-                                   Text="{Binding Content}"
-                                   TextColor="{AppThemeBinding Light={StaticResource Gray500},
+                    <Border Padding="10"
+                            StrokeShape="RoundRectangle 10">
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="10">
+                            <VerticalStackLayout Grid.Column="0"
+                                                 Spacing="4">
+                                <Label FontAttributes="Bold"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="2"
+                                       Text="{Binding Title}" />
+                                <Label FontSize="13"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="3"
+                                       Text="{Binding Content}"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500},
                                                                Dark={StaticResource Gray300}}" />
-                        </VerticalStackLayout>
-                        <Button Grid.Column="1"
-                                Padding="14,10"
-                                Clicked="OnEditClicked"
-                                SemanticProperties.Hint="Edit this note"
-                                Text="Edit"
-                                VerticalOptions="Center" />
-                    </Grid>
+                            </VerticalStackLayout>
+                            <Button Grid.Column="1"
+                                    Clicked="OnEditClicked"
+                                    SemanticProperties.Hint="Edit this note"
+                                    Text="Edit"
+                                    VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

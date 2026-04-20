@@ -7,7 +7,9 @@
              Title="Tasks">
 
     <!-- Grid: header row (Auto) + list (* fills remaining viewport height). -->
-    <Grid Padding="16"
+    <Grid Padding="{OnIdiom Phone='16', Tablet='24', Desktop='32'}"
+          MaximumWidthRequest="{OnIdiom Phone='800', Tablet='980', Desktop='1280'}"
+          HorizontalOptions="Center"
           RowDefinitions="Auto,*"
           RowSpacing="12">
 
@@ -26,46 +28,52 @@
                         ItemsSource="{Binding Tasks}"
                         SelectionMode="None"
                         VerticalOptions="Fill">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical"
+                                 Span="{OnIdiom Phone='1', Tablet='2', Desktop='3'}"
+                                 VerticalItemSpacing="10"
+                                 HorizontalItemSpacing="10" />
+            </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:TaskItem">
                     <!-- Row: flexible title/description (*), intrinsic-width actions (Auto). -->
-                    <Grid Padding="4,10"
-                          ColumnDefinitions="*,Auto,Auto"
-                          ColumnSpacing="10"
-                          RowDefinitions="Auto,Auto">
-                        <VerticalStackLayout Grid.Row="0"
-                                             Grid.RowSpan="2"
-                                             Grid.Column="0"
-                                             Spacing="4">
-                            <Label FontAttributes="Bold"
-                                   LineBreakMode="TailTruncation"
-                                   MaxLines="2"
-                                   Text="{Binding Title}" />
-                            <Label FontSize="13"
-                                   LineBreakMode="TailTruncation"
-                                   MaxLines="3"
-                                   Text="{Binding Description}"
-                                   TextColor="{AppThemeBinding Light={StaticResource Gray500},
+                    <Border Padding="10"
+                            StrokeShape="RoundRectangle 10">
+                        <Grid ColumnDefinitions="*,Auto,Auto"
+                              ColumnSpacing="10"
+                              RowDefinitions="Auto,Auto">
+                            <VerticalStackLayout Grid.Row="0"
+                                                 Grid.RowSpan="2"
+                                                 Grid.Column="0"
+                                                 Spacing="4">
+                                <Label FontAttributes="Bold"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="2"
+                                       Text="{Binding Title}" />
+                                <Label FontSize="13"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="3"
+                                       Text="{Binding Description}"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500},
                                                                Dark={StaticResource Gray300}}" />
-                        </VerticalStackLayout>
-                        <Button Grid.Row="0"
-                                Grid.RowSpan="2"
-                                Grid.Column="1"
-                                Padding="14,10"
-                                Clicked="OnEditClicked"
-                                SemanticProperties.Hint="Edit this task"
-                                Text="Edit"
-                                VerticalOptions="Center" />
-                        <Button Grid.Row="0"
-                                Grid.RowSpan="2"
-                                Grid.Column="2"
-                                Padding="14,10"
-                                Command="{Binding Path=ToggleCompletionCommand, Source={x:Reference ThisPage}}"
-                                CommandParameter="{Binding .}"
-                                SemanticProperties.Hint="Mark task complete or incomplete"
-                                Text="Done"
-                                VerticalOptions="Center" />
-                    </Grid>
+                            </VerticalStackLayout>
+                            <Button Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Clicked="OnEditClicked"
+                                    SemanticProperties.Hint="Edit this task"
+                                    Text="Edit"
+                                    VerticalOptions="Center" />
+                            <Button Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="2"
+                                    Command="{Binding Path=ToggleCompletionCommand, Source={x:Reference ThisPage}}"
+                                    CommandParameter="{Binding .}"
+                                    SemanticProperties.Hint="Mark task complete or incomplete"
+                                    Text="Done"
+                                    VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
