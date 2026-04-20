@@ -22,7 +22,7 @@
         <VerticalStackLayout Padding="16"
                              Spacing="14"
                              MaximumWidthRequest="720"
-                             HorizontalOptions="Fill">
+                             HorizontalOptions="Center">
 
             <Entry Placeholder="Title"
                    SemanticProperties.Hint="Task title"
