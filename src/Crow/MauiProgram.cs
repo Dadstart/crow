@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Crow.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Storage;
 
 namespace Crow;
 
@@ -15,10 +18,15 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
+        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "crow.db");
+        builder.Services.AddSingleton(_ => new DatabaseService(dbPath));
+
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
 
-        return builder.Build();
+        var app = builder.Build();
+        app.Services.GetRequiredService<DatabaseService>().Initialize();
+        return app;
     }
 }
