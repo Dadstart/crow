@@ -9,6 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
 		<PackageReference Include="xunit" Version="2.9.3" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
@@ -19,6 +20,16 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\Crow.Storage\Crow.Storage.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="..\..\src\Crow\Models\TaskItem.cs" Link="Source\Models\TaskItem.cs" />
+		<Compile Include="..\..\src\Crow\Models\NoteItem.cs" Link="Source\Models\NoteItem.cs" />
+		<Compile Include="..\..\src\Crow\Models\CrowExportDocument.cs" Link="Source\Models\CrowExportDocument.cs" />
+		<Compile Include="..\..\src\Crow\Services\DatabaseService.cs" Link="Source\Services\DatabaseService.cs" />
+		<Compile Include="..\..\src\Crow\Repositories\TaskRepository.cs" Link="Source\Repositories\TaskRepository.cs" />
+		<Compile Include="..\..\src\Crow\Repositories\NoteRepository.cs" Link="Source\Repositories\NoteRepository.cs" />
+		<Compile Include="..\..\src\Crow\Services\DataExportService.cs" Link="Source\Services\DataExportService.cs" />
 	</ItemGroup>
 
 </Project>
