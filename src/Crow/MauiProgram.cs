@@ -1,5 +1,6 @@
 ﻿using Crow.Repositories;
 using Crow.Services;
+using Crow.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Storage;
@@ -23,6 +24,8 @@ public static class MauiProgram
         builder.Services.AddSingleton(_ => new DatabaseService(dbPath));
         builder.Services.AddSingleton<TaskRepository>();
         builder.Services.AddSingleton<NoteRepository>();
+        builder.Services.AddTransient<TaskListViewModel>();
+        builder.Services.AddTransient<TaskDetailViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();
