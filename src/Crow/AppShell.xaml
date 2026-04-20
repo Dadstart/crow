@@ -8,6 +8,10 @@
 
     <TabBar>
         <ShellContent
+            Title="Search"
+            ContentTemplate="{DataTemplate views:SearchPage}"
+            Route="SearchPage" />
+        <ShellContent
             Title="Tasks"
             ContentTemplate="{DataTemplate views:TaskListPage}"
             Route="TaskListPage" />

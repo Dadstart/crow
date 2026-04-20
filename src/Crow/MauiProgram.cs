@@ -24,6 +24,8 @@ public static class MauiProgram
         builder.Services.AddSingleton(_ => new DatabaseService(dbPath));
         builder.Services.AddSingleton<TaskRepository>();
         builder.Services.AddSingleton<NoteRepository>();
+        builder.Services.AddSingleton<SearchService>();
+        builder.Services.AddTransient<SearchViewModel>();
         builder.Services.AddTransient<TaskListViewModel>();
         builder.Services.AddTransient<TaskDetailViewModel>();
         builder.Services.AddTransient<NoteListViewModel>();

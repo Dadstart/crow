@@ -103,6 +103,34 @@ public sealed class NoteRepository
         await cmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
     }
 
+    // Case-insensitive substring search on title and content (INSTR + LOWER).
+    public async Task<IReadOnlyList<NoteItem>> SearchByTitleOrContentAsync(string query, CancellationToken cancellationToken = default)
+    {
+        var needle = query.Trim();
+        if (needle.Length == 0)
+            return [];
+
+        var lower = needle.ToLowerInvariant();
+
+        await using var connection = await _database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+        using var cmd = connection.CreateCommand();
+        cmd.CommandText = """
+            SELECT Id, Title, Content, Tags, CreatedAt, UpdatedAt
+            FROM NoteItems
+            WHERE INSTR(LOWER(Title), $needle) > 0
+               OR INSTR(LOWER(Content), $needle) > 0
+            ORDER BY UpdatedAt DESC;
+            """;
+        cmd.Parameters.AddWithValue("$needle", lower);
+
+        var list = new List<NoteItem>();
+        await using var reader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+            list.Add(ReadNote(reader));
+
+        return list;
+    }
+
     static NoteItem ReadNote(SqliteDataReader reader)
     {
         return new NoteItem

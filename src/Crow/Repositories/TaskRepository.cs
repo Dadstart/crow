@@ -106,6 +106,34 @@ public sealed class TaskRepository
         await cmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
     }
 
+    // Case-insensitive substring search on title and description (INSTR + LOWER).
+    public async Task<IReadOnlyList<TaskItem>> SearchByTitleOrDescriptionAsync(string query, CancellationToken cancellationToken = default)
+    {
+        var needle = query.Trim();
+        if (needle.Length == 0)
+            return [];
+
+        var lower = needle.ToLowerInvariant();
+
+        await using var connection = await _database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+        using var cmd = connection.CreateCommand();
+        cmd.CommandText = """
+            SELECT Id, Title, Description, IsCompleted, DueDate, Priority, Tags, CreatedAt, UpdatedAt
+            FROM TaskItems
+            WHERE INSTR(LOWER(Title), $needle) > 0
+               OR INSTR(LOWER(Description), $needle) > 0
+            ORDER BY UpdatedAt DESC;
+            """;
+        cmd.Parameters.AddWithValue("$needle", lower);
+
+        var list = new List<TaskItem>();
+        await using var reader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+            list.Add(ReadTask(reader));
+
+        return list;
+    }
+
     static TaskItem ReadTask(SqliteDataReader reader)
     {
         var dueDateOrdinal = reader.GetOrdinal("DueDate");
