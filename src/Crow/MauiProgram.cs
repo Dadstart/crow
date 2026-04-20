@@ -28,6 +28,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<SearchService>();
         builder.Services.AddSingleton<IAppFileStorage>(_ => new AppFileStorage(FileSystem.AppDataDirectory));
         builder.Services.AddSingleton<DataExportService>();
+        builder.Services.AddSingleton<ITaskNotificationService, TaskNotificationService>();
         builder.Services.AddTransient<SearchViewModel>();
         builder.Services.AddTransient<ThemeSettingsViewModel>();
         builder.Services.AddTransient<TaskListViewModel>();

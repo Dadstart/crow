@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Crow.Models;
 using Crow.Repositories;
+using Crow.Services;
 using Microsoft.Maui.Controls;
 
 namespace Crow.ViewModels;
@@ -9,12 +10,14 @@ namespace Crow.ViewModels;
 public sealed class TaskListViewModel : BaseViewModel
 {
     readonly TaskRepository _taskRepository;
+    readonly ITaskNotificationService _taskNotificationService;
 
     ObservableCollection<TaskItem> _tasks = [];
 
-    public TaskListViewModel(TaskRepository taskRepository)
+    public TaskListViewModel(TaskRepository taskRepository, ITaskNotificationService taskNotificationService)
     {
         _taskRepository = taskRepository;
+        _taskNotificationService = taskNotificationService;
 
         LoadTasksCommand = new Command(async () => await LoadTasksAsync().ConfigureAwait(false));
         AddTaskCommand = new Command<TaskItem>(
@@ -62,6 +65,7 @@ public sealed class TaskListViewModel : BaseViewModel
     public async Task AddTaskAsync(TaskItem task)
     {
         await _taskRepository.AddAsync(task).ConfigureAwait(false);
+        await _taskNotificationService.ScheduleTaskReminderAsync(task).ConfigureAwait(false);
         await LoadTasksAsync().ConfigureAwait(false);
     }
 
@@ -69,12 +73,14 @@ public sealed class TaskListViewModel : BaseViewModel
     {
         task.UpdatedAt = DateTime.UtcNow;
         await _taskRepository.UpdateAsync(task).ConfigureAwait(false);
+        await _taskNotificationService.ScheduleTaskReminderAsync(task).ConfigureAwait(false);
         await LoadTasksAsync().ConfigureAwait(false);
     }
 
     public async Task DeleteTaskAsync(TaskItem task)
     {
         await _taskRepository.DeleteAsync(task.Id).ConfigureAwait(false);
+        await _taskNotificationService.CancelTaskReminderAsync(task.Id).ConfigureAwait(false);
         await LoadTasksAsync().ConfigureAwait(false);
     }
 
@@ -83,6 +89,7 @@ public sealed class TaskListViewModel : BaseViewModel
         task.IsCompleted = !task.IsCompleted;
         task.UpdatedAt = DateTime.UtcNow;
         await _taskRepository.UpdateAsync(task).ConfigureAwait(false);
+        await _taskNotificationService.ScheduleTaskReminderAsync(task).ConfigureAwait(false);
         await LoadTasksAsync().ConfigureAwait(false);
     }
 }

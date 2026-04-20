@@ -1,6 +1,7 @@
 using System.Windows.Input;
 using Crow.Models;
 using Crow.Repositories;
+using Crow.Services;
 using Microsoft.Maui.Controls;
 
 namespace Crow.ViewModels;
@@ -10,6 +11,7 @@ public sealed class TaskDetailViewModel : BaseViewModel
     public static readonly string[] PriorityOptions = ["Low", "Medium", "High"];
 
     readonly TaskRepository _taskRepository;
+    readonly ITaskNotificationService _taskNotificationService;
 
     TaskItem? _currentTask;
     string _tagsText = "";
@@ -17,9 +19,10 @@ public sealed class TaskDetailViewModel : BaseViewModel
     bool _hasDueDate;
     bool _isNewTask;
 
-    public TaskDetailViewModel(TaskRepository taskRepository)
+    public TaskDetailViewModel(TaskRepository taskRepository, ITaskNotificationService taskNotificationService)
     {
         _taskRepository = taskRepository;
+        _taskNotificationService = taskNotificationService;
 
         LoadTaskCommand = new Command<Guid>(
             async id => await LoadTaskAsync(id).ConfigureAwait(false),
@@ -168,6 +171,7 @@ public sealed class TaskDetailViewModel : BaseViewModel
     public async Task AddTaskAsync(TaskItem task)
     {
         await _taskRepository.AddAsync(task).ConfigureAwait(false);
+        await _taskNotificationService.ScheduleTaskReminderAsync(task).ConfigureAwait(false);
         CurrentTask = await _taskRepository.GetByIdAsync(task.Id).ConfigureAwait(false);
     }
 
@@ -175,12 +179,14 @@ public sealed class TaskDetailViewModel : BaseViewModel
     {
         task.UpdatedAt = DateTime.UtcNow;
         await _taskRepository.UpdateAsync(task).ConfigureAwait(false);
+        await _taskNotificationService.ScheduleTaskReminderAsync(task).ConfigureAwait(false);
         CurrentTask = await _taskRepository.GetByIdAsync(task.Id).ConfigureAwait(false);
     }
 
     public async Task DeleteTaskAsync(TaskItem task)
     {
         await _taskRepository.DeleteAsync(task.Id).ConfigureAwait(false);
+        await _taskNotificationService.CancelTaskReminderAsync(task.Id).ConfigureAwait(false);
         CurrentTask = null;
         TagsText = "";
         DueDatePickerValue = DateTime.UtcNow.Date;
@@ -192,6 +198,7 @@ public sealed class TaskDetailViewModel : BaseViewModel
         task.IsCompleted = !task.IsCompleted;
         task.UpdatedAt = DateTime.UtcNow;
         await _taskRepository.UpdateAsync(task).ConfigureAwait(false);
+        await _taskNotificationService.ScheduleTaskReminderAsync(task).ConfigureAwait(false);
         CurrentTask = await _taskRepository.GetByIdAsync(task.Id).ConfigureAwait(false);
         SyncEditorsFromTask();
     }
