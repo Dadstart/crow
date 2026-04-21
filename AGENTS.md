@@ -6,7 +6,7 @@
 - Prefer experimenting with cutting edge technologies
 - Prefer open source projects
 - All changes should be reviewed before commit
-- Use PowerShell 7.5 in the editor and terminal
+- Use PowerShell 7.6 in the editor and terminal
 
 ## Local Workflow
 
@@ -17,7 +17,7 @@
 
 ### dotnet
 
-- Use dotnet 9
+- Use dotnet 10
 
 ### C#
 
@@ -46,11 +46,7 @@
 
 ### PowerShell
 
-- Use PowerShell 7.5
-
-### Ffmpeg and Ffprobe
-
-- Use proper casing for 'Ffprobe' and 'Ffmpeg' when naming code elements
+- Use PowerShell 7.6
 
 ### JSON
 
@@ -65,7 +61,7 @@
 
 ## Terminal / Scripting
 
-- Use PowerShell 7.5 for cross-platform scripting
+- Use PowerShell 7.6 for cross-platform scripting
 
 ## Architecture
 
